@@ -33,17 +33,6 @@ module.exports.get_all_user = (req, res) => {
     });
 }
 
-module.exports.get_user_products = (req, res) => {
-    model_usuario.findOne({
-        _id: objectid(req.params.user_id)
-    })
-    .populate('products')
-    .exec((err, res) => {
-        if(err) res.status(505).send(err);
-        res.status(200).json(res.report);
-    });
-}
-
 module.exports.update_user = (req, res) => {
     model_usuario.findOneAndUpdate(
         objectid(req.params.user_id), 
@@ -63,6 +52,39 @@ module.exports.remove_user = (req, res) => {
         })
 }
 
-module.exports.remove_user_product = (req, res) => {
 
+module.exports.add_user_product = (req, res) => {
+    model_usuario.update(
+        {
+            _id: objectid(req.params.user_id)
+        },{
+            $push: {products: req.params.product_id}
+        }, (err, result) => {
+            if(err) res.send(err);
+            res.send(result);
+        });
 }
+
+module.exports.get_user_products = (req, res) => {
+    model_usuario.findOne({
+        _id: objectid(req.params.user_id)
+    })
+    .populate('products')
+    .exec((err, res) => {
+        if(err) res.status(505).send(err);
+        res.status(200).json(res.report);
+    });
+}
+
+module.exports.remove_user_product = (req, res) => {
+    model_usuario.findOne(
+        {
+            _id: objectid(req.params.user_id)
+        },{
+            $pullAll: {products: req.params.product_id}
+        }, (err, result) => {
+            if(err) res.send(err);
+            res.send(result);
+        });
+}
+

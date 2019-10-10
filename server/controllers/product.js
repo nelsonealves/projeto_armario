@@ -3,15 +3,22 @@ let product_schema = require('../models/product');
 let model_product = mongoose.model('product', product_schema);
 let objectid = require('mongodb').ObjectID;
 
-module.exports.add_product = (express, req, res) => {
-	let product = new model_usuario(req.body);
+module.exports.add_product = (req, res) => {
+	let product = new model_product(req.body);
     product.save((err, result) => {
         if(err) result.status(400).send(err);
-        result.status(200).json(usuario);
+        res.status(200).json(result);
     })
 }
 
-module.exports.get_product = (express, req, res) => {
+module.exports.get_products = (express, req, res) => {
+    model_product.find({},
+        (err, msg) => {
+            if(err) res.send(err);
+            res.status(200).json(msg);
+    });
+}
+module.exports.get_a_product = (express, req, res) => {
     model_product.aggregate(
         [{
             $match: {
