@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-class Armarios extends Component {
+class Estoque extends Component {
   render(){
     return(
         <div>
-           Armarios
+           Estoque
         </div>
     )
 }
 }
 
-export default Armarios;
+export default Estoque;
