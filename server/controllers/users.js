@@ -70,9 +70,9 @@ module.exports.get_user_products = (req, res) => {
         _id: objectid(req.params.user_id)
     })
     .populate('products')
-    .exec((err, res) => {
+    .exec((err, result) => {
         if(err) res.status(505).send(err);
-        res.status(200).json(res.report);
+        res.status(200).json(result);
     });
 }
 
@@ -81,10 +81,22 @@ module.exports.remove_user_product = (req, res) => {
         {
             _id: objectid(req.params.user_id)
         },{
-            $pullAll: {products: req.params.product_id}
+            $pull: {products: req.params.product_id}
         }, (err, result) => {
             if(err) res.send(err);
             res.send(result);
         });
 }
 
+
+module.exports.remove_user_all_product = (req, res) => {
+    model_usuario.update(
+        {
+            _id: objectid(req.params.user_id)
+        },{
+            $set: {products: []}
+        }, (err, result) => {
+            if(err) res.send(err);
+            res.send(result);
+        });
+}
