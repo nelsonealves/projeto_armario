@@ -72,7 +72,7 @@ module.exports.get_user_products = (req, res) => {
     .populate('products')
     .exec((err, result) => {
         if(err) res.status(505).send(err);
-        res.status(200).json(result);
+        res.status(200).json(result.products);
     });
 }
 
