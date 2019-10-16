@@ -11,15 +11,15 @@ class Home extends Component {
     return(
         <div>
             <BrowserRouter>
-            <div class="d-flex" id="wrapper">
-                <Sidebar/>
-                <div id="page-content-wrapper">
-                    <Route path='/' exact component={Estoque}/>
-                    <Route path='/armarios'  component={Armarios}/>
-                    <Route path='/usuarios' component={Usuarios}/>
-                    <Route path='/produtos' component={Produtos}/>
+                <div>
+                    <Sidebar/>
+                    <div id="container-fluid">
+                        <Route path='/' exact component={Estoque}/>
+                        <Route path='/armarios'  component={Armarios}/>
+                        <Route path='/usuarios' component={Usuarios}/>
+                        <Route path='/produtos' component={Produtos}/>
+                    </div>
                 </div>
-            </div>
             </BrowserRouter>
         </div>
     )
