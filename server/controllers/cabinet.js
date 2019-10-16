@@ -1,4 +1,4 @@
 
-module.exports.f = (express, req, res) => {
+module.exports.f = (req, res) => {
 	
 }   

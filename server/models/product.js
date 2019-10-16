@@ -5,11 +5,11 @@ let Schema = mongoose.Schema;
 let objectid = require('mongodb').ObjectID;
 
 let product_schema = new mongoose.Schema ({
-    id: String,
-    marca: String,
-    model: String,
+    model: {type: Schema.ObjectId, ref: 'model'},
     emprestado: Boolean,
-    who: [{type: Schema.ObjectId, ref: 'users'}]
+    who: {type: Schema.ObjectId, ref: 'users'},
+    where: {type: Schema.ObjectId, ref: 'cabinet'},
+
     },{collection: 'product'}
 );
 

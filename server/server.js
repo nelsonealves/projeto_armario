@@ -6,6 +6,7 @@ cors = require('cors');
 
 //express.use(bodyParser.urlencoded({extended: true}));
 express.use(bodyParser.json());
+
 express.use(cors());
 consign().include('/routes')
 .then('/controllers')
