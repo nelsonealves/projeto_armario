@@ -74,7 +74,7 @@ class Produtos extends Component {
                     </div>
                 </div> 
                 <div className="row">
-                    <Table header={["Nome", "Matrícula"]} data={this.state.data} id_select={this.state.id_user_select} row_select={this.row_select} filter={true} />
+                    <Table header={["Nome", "Posse", "Local" ]} data={this.state.data} id_select={this.state.id_user_select} row_select={this.row_select} filter={true} />
                 </div>
             </div>
         </div>
