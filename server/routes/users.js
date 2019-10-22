@@ -7,6 +7,10 @@ module.exports = (express) => {
         express.controllers.users.get_user(req, res);  
     })
 
+    express.get('/user/:matricula/matricula', (req, res) => {
+        express.controllers.users.get_by_matricula(req, res);
+    });
+    
     express.get('/all_users', (req, res) => { // ok
         express.controllers.users.get_all_user(req, res);  
     })
