@@ -25,6 +25,20 @@ module.exports.get_user = (req, res) => {
     );
 }
 
+module.exports.get_by_matricula = (req, res) => {
+    model_usuario.aggregate(
+        [{
+            $match: {
+                matricula: { $regex: req.params.matricula, $options: 'i' } 
+            }
+        }],
+        (err, result) => {
+            if (err) res.send(err);
+            res.status(200).json(result);
+        }
+    );
+}
+
 module.exports.get_all_user = (req, res) => {
     model_usuario.find({},
         (err, msg) => {
