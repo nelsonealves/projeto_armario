@@ -82,7 +82,27 @@ class Form extends Component {
     }
 }
 
+class Combobox extends Component {
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        return(
+            <select name={this.props.name}>
+                {
+                    Object.keys(this.props.option).map(function(key) {
+                        return(
+                            <option>{this.props.option[key]}</option>
+                        )
+                    }.bind(this))
+                }
+            </select>
+        )
+    }
+}
 export {
+    Combobox,
     Modal, 
     Tab,
     Form

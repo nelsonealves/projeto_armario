@@ -22,6 +22,11 @@ module.exports.add_product = (req, res) => {
     })
 }
 
+module.exports.add_many_products = () => {
+    
+
+}
+
 module.exports.get_products = (req, res) => {
     model_product.find({},
         (err, msg) => {

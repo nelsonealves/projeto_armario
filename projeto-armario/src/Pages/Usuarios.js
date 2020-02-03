@@ -21,7 +21,9 @@ class Usuarios extends Component {
       let aux = [];
       let aux1 = [];
   
-      await fetch("http://localhost:8081/all_users", { method: 'GET' }).then((resp) => { return resp.json(); }).then((data) => {
+      await fetch("http://localhost:8081/all_users", { method: 'GET' })
+      .then((resp) => { return resp.json(); })
+      .then((data) => {
         data.map((item, i) => {
           aux.push(data[i].name);
           aux.push(data[i].matricula);
@@ -33,7 +35,7 @@ class Usuarios extends Component {
       }).catch((err) => {
         console.log(err);
       })
-    
+      
   }
 
   form_user = () => {
