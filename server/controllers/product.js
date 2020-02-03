@@ -18,13 +18,11 @@ module.exports.add_product = (req, res) => {
                 if(err) res.send(err);
                 res.status(200).json(result);
             });
-       
     })
 }
 
-module.exports.add_many_products = () => {
-    
-
+module.exports.add_many_products = (req, res) => {
+    product.insertMany(req.body, )                      /////// IMPLEMENTAR FUNÇÃO PARA INSERIR VARIOS AO MESMO TEMPO
 }
 
 module.exports.get_products = (req, res) => {

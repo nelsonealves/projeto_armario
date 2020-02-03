@@ -5,7 +5,7 @@ import Table from './Table.js'
 class Produtos extends Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], row_select: [], id_user_select: [], all_product: [], products: []};
+    this.state = { data: [], row_select: [], id_user_select: [], all_product: [], products: [], cabinet:[], all_cabinet:[]};
     this.row_select = this.row_select.bind(this);
     this.update_models = this.update_models.bind(this);
     this.form_product = this.form_product.bind(this);
@@ -19,7 +19,6 @@ class Produtos extends Component {
   async update_models () {
     let aux = [];
     
-    
     await fetch("http://localhost:8081/all_models", { method: 'GET' })
     .then((resp) => { return resp.json(); })
     .then((data) => {
@@ -32,10 +31,26 @@ class Produtos extends Component {
      }).catch((err) => {
        console.log(err);
      })
-
-
-     
   }
+
+  async update_cabinet () {
+    let aux = [];
+    
+    await fetch("http://localhost:8081/all_models", { method: 'GET' })
+    .then((resp) => { return resp.json(); })
+    .then((data) => {
+      this.setState({all_cabinet: data});
+       data.map((item, i) => {
+         aux.push(data[i].name);
+        
+       });
+         this.setState({cabinet: aux});
+     }).catch((err) => {
+       console.log(err);
+     })
+  }
+
+
 
   form_model = () => {
     return (
@@ -65,6 +80,10 @@ class Produtos extends Component {
             <div class="form-group">
               <label for="pwd"><b>Quantidade:</b></label>
               <input type="input" name="quantidade" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="pwd"><b>Armário:</b></label>
+              <Combobox name={"cabinet"} option={this.state.cabinet} />
             </div>
           </div>
         </div>
@@ -104,7 +123,7 @@ class Produtos extends Component {
     let data = {
       name: value.get('product'),
       cpf: value.get('quantidade'),
-      
+      cabinet: value.get('cabinet')
     }
     console.log(data);
 

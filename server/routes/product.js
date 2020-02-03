@@ -1,5 +1,5 @@
 module.exports = (express) => {
-    express.post('/product/:model_id', (req, res) => {
+    express.post('/product', (req, res) => {
        express.controllers.product.add_product(req, res);  
     })
 
