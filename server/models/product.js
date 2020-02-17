@@ -6,7 +6,11 @@ let objectid = require('mongodb').ObjectID;
 
 let product_schema = new mongoose.Schema ({
     model: {type: Schema.ObjectId, ref: 'model'},
-    where: {type: Schema.ObjectId, ref: 'cabinet'},
+    cabinet: {type: Schema.ObjectId, ref: 'cabinet'},
+    loan: {
+        type: Boolean,
+        default: false
+    }
     },{collection: 'product'}
 );
 

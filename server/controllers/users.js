@@ -86,7 +86,14 @@ module.exports.get_user_products = (req, res) => {
     .populate('products')
     .exec((err, result) => {
         if(err) res.status(505).send(err);
-        res.status(200).json(result.products);
+        var options = {
+            path: 'products.model',
+            model: 'model'
+      };
+        model_usuario.populate(result, options, (err, resp)=>{
+            res.status(200).json(resp.products);
+        })
+        
     });
 }
 

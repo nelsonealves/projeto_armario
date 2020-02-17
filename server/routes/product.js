@@ -3,6 +3,10 @@ module.exports = (express) => {
        express.controllers.product.add_product(req, res);  
     })
 
+    express.post('/products', (req, res) => {
+        express.controllers.product.add_many_products(req, res);  
+     })
+
     express.get('/all_product', (req, res) => {
         express.controllers.product.get_products(req, res);  
     })

@@ -3,6 +3,8 @@ let product_schema = require('../models/product');
 let model_product = mongoose.model('product', product_schema);
 let model_schema = require('../models/model');
 let model_model = mongoose.model('model', model_schema);
+let cabinet_schema = require('../models/cabinet');
+let model_cabinet = mongoose.model('cabinet', cabinet_schema);
 let objectid = require('mongodb').ObjectID;
 
 module.exports.add_product = (req, res) => {
@@ -22,15 +24,41 @@ module.exports.add_product = (req, res) => {
 }
 
 module.exports.add_many_products = (req, res) => {
-    product.insertMany(req.body, )                      /////// IMPLEMENTAR FUNÇÃO PARA INSERIR VARIOS AO MESMO TEMPO
+    let id_products= [];
+    model_product.insertMany(req.body,(err, result1) => {
+        if(err) console.log(err);
+            if (Array.isArray(result1)){
+                result1.forEach(element => {
+                    id_products.push(element._id)
+                })
+                
+                console.log(result1);
+                
+                model_cabinet.updateMany(
+                    {
+                        _id: objectid(result1[0].cabinet)
+                    },{
+                        $push: {products: id_products}
+                    }, (err, result2) => {
+                        if(err) res.send(err);
+                        console.log(result2);
+                        res.send(result2);
+                    }
+                );
+                
+            }
+        //console.log(res);
+    })       
 }
 
 module.exports.get_products = (req, res) => {
-    model_product.find({},
-        (err, msg) => {
-            if(err) res.send(err);
-            res.status(200).json(msg);
-    });
+    model_product.find({})
+    .populate('model')
+    .populate('cabinet')
+    .exec((err, element) => {
+        if(err) res.status(505).send(err);
+        res.status(200).json(element);
+    })
 }
 module.exports.get_a_product = (express, req, res) => {
     model_product.aggregate(

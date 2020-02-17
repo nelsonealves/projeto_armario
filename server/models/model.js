@@ -7,7 +7,10 @@ let objectid = require('mongodb').ObjectID;
 let model_schema = new Schema ({
     name: String,
     obs: String,
-    products: [{type: Schema.ObjectId, ref: 'product'}]
+    products: [{
+        type: Schema.ObjectId, 
+        ref: 'product'
+    }]
     },{collection: 'model'}
 );
 
