@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {Combobox, Modal, Form, Tab} from './Utils.js'
-import DatePicker from 'react-date-picker';
+import DatePicker from 'react-datepicker';
 import Table from './Table_product.js'
+
+import "react-datepicker/dist/react-datepicker.css";
 
 class Produtos extends Component {
   constructor(props) {
@@ -335,7 +337,7 @@ class Produtos extends Component {
       })
   }
 
-  onChange = date => this.setState({ date })
+  onChange = date => this.setState({ date: date })
 
   render(){
     
@@ -345,14 +347,16 @@ class Produtos extends Component {
                 <div className="row"> 
                     <a class="accordion-toggle" data-toggle="collapse" href="#demo1">Novo Modelo</a>
                     <div id="demo1" class="collapse">
+                      <div className="row">      
                         <Form form={this.form_model()} return={this.add_model}/>
+                      </div>
                     </div>
                 </div>
                 <div className="row">
-                <a class="accordion-toggle" data-toggle="collapse" href="#demo2">Novo Produto</a>
-                    <div id="demo2" class="collapse">
-                        <Form form={this.form_product()} return={this.add_product}/>
-                    </div>
+                  <a class="accordion-toggle" data-toggle="collapse" href="#demo2">Novo Produto</a>
+                  <div id="demo2" class="collapse">
+                      <Form form={this.form_product()} return={this.add_product}/>
+                  </div>
                 </div> 
                 </div>
                 <div className="row">
@@ -360,25 +364,31 @@ class Produtos extends Component {
                     <Table header={["Nome", "Local"]} data={this.state.data} id_select={this.state.id_user_select} row_select={this.row_select} filter={true} />
                   </div>
                   <div class="col-sm-6">
-                  <form className='form' onSubmit={this.add_product_user}>
-                    <div class="form-group">
-                      <Combobox name={"user"} option={this.state.users} />
-                      <button type="submit" class="btn btn-success">Adicionar</button>
-                    </div>
-                    <div class="row">
-                      <div class="custom-control custom-switch">
-                        <input type="checkbox" name="return" class="custom-control-input" id="customSwitches"/>
-                        <label class="custom-control-label" for="customSwitches">Produto será devolvido?</label>
+                    <form className='form' onSubmit={this.add_product_user}>
+                      <div class="form-group">
+                        <div class="row">
+                          <Combobox name={"user"} option={this.state.users} />
+                        </div>
                       </div>
-                      <div>
-                        <DatePicker
+                      <div class="row">
+                        <div class="custom-control custom-switch">
+                          <input type="checkbox" name="return" class="custom-control-input" id="customSwitches"/>
+                          <label class="custom-control-label" for="customSwitches">Produto será devolvido?</label>
+                        </div>
+                        <div>
+                          <DatePicker
                           onChange={this.onChange}
-                          value={this.state.date}
-                        />
+                          selected={this.state.date}
+                          />
+                        </div>
                       </div>
-                    </div>  
-                  </form>
+                      <div class="row">
+                        <button type="submit" class="btn btn-success">Adicionar</button>
+                      </div>
+                    </form>
+                    <div class="row">
                     <Table header={["Nome", "Local"]} data={this.state.data_e} id_select={this.state.id_user_select_e} row_select={this.row_select_e} filter={true} />
+                    </div>
                   </div>
             </div>
         </div>

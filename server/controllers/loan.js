@@ -5,6 +5,8 @@ let user_schema = require('../models/users.js');
 let user_model = mongoose.model('user', user_schema);
 let product_schema = require('../models/product.js');
 let product_model = mongoose.model('product', product_schema);
+let cabinet_schema = require('../models/cabinet.js');
+let cabinet_model = mongoose.model('cabinet', cabinet_schema);
 let objectid = require('mongodb').ObjectID;
 
 module.exports.add_loan = (req, res) => {

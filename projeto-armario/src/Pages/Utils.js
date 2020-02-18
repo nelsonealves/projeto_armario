@@ -89,7 +89,7 @@ class Combobox extends Component {
 
     render(){
         return(
-            <select name={this.props.name}>
+            <select name={this.props.name} class="custom-select">
                 {
                     Object.keys(this.props.option).map(function(key) {
                         return(

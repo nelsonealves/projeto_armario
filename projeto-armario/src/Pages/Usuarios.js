@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Modal, Form, Tab} from './Utils.js'
 //import Table from './Table.js'
 import Table from './Table_product.js'
+import Table_s from './Table_select.js'
 class Usuarios extends Component {
   constructor(props) {
     super(props);
@@ -189,7 +190,7 @@ class Usuarios extends Component {
                 <Modal 
                   id={'create_dealership'} 
                   header={'Usuário'} 
-                  body={<Table header={["Produto"]} data={this.state.product_user} id_select={""} row_select={""} filter={true} />} 
+                  body={<Table_s header={["Produto"]} data={this.state.product_user} id_select={""} row_select={""} filter={true} />} 
                   footer={''}
                 />
             </div>
