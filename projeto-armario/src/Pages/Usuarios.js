@@ -9,6 +9,7 @@ class Usuarios extends Component {
     this.state = { 
       data: [], 
       product_user:[],
+      product_user_e:[],
       row_select: [],
       id_user_select: [],
     };
@@ -17,6 +18,9 @@ class Usuarios extends Component {
     this.populate_product = this.populate_product.bind(this);
     this.value_filter = this.value_filter.bind(this);
     this.user_info = this.user_info.bind(this);
+    this.modal_user = this.modal_user.bind(this);
+    this.row_select = this.row_select.bind(this);
+    this.row_select_e = this.row_select_e.bind(this);
     // this.table_report_block = false;
   }
 
@@ -174,6 +178,85 @@ class Usuarios extends Component {
     }
   }
 
+  modal_user = () => {
+    return (
+      <div>
+        <div class="col-sm-6">
+          <Table_s header={["Produto"]} data={this.state.product_user} id_select={""} row_select={this.row_select} filter={true} />
+        </div>
+        <div class="col-sm-6">
+        <div class="row">
+                        <button type="submit" class="btn btn-success">Devolver</button>
+                      </div>
+          <Table_s header={["Produto"]} data={this.state.product_user_e} id_select={""} row_select={this.row_select_e} filter={true} />
+        </div>
+      </div>
+    )
+  }
+
+  row_select = (value) => {
+    console.log(value);
+    console.log("value.body")
+    console.log(value.body);
+    // console.log(value);
+    let aux = [];
+    let aux_e = [];
+    
+    aux = this.state.product_user;
+    aux_e = this.state.product_user_e;
+    //console.log(this.state.data_e);
+
+    aux_e.push(value.body);
+    aux.forEach((element, id) => {
+      console.log("element.id");
+      console.log(element.id);
+      console.log("value.id");
+      console.log(value.body.id);
+      if(element.id == value.body.id){
+        console.log("encontrou");
+        console.log(id)
+        aux.splice(id,1);
+      }
+    })
+    // console.log("auxe body")
+    // console.log(aux_e)
+    // aux1_e.push(value.body)
+    this.setState({product_user: aux})
+    this.setState({product_user_e: aux_e})
+  }
+
+  row_select_e = (value) => {
+    console.log(value);
+    console.log("OPAAA");
+    let aux = [];
+    let aux_e = [];
+    
+    aux = this.state.product_user_e;
+    aux_e = this.state.product_user;
+    //console.log(this.state.data_e);
+    aux_e.push(value.body);
+    
+    
+    aux.forEach((element, id) => {
+      console.log("element.id");
+      console.log(element.id);
+      console.log("value.id");
+      console.log(value.body.id);
+      if(element.id == value.body.id){
+        console.log("encontrou");
+        console.log(id)
+        aux.splice(id,1);
+      }
+    })
+    console.log("aux");
+    console.log(aux);
+    console.log("aux_e");
+    console.log(aux_e);
+   
+    this.setState({product_user: aux_e})
+    this.setState({product_user_e: aux})
+  }
+
   render(){
     
     return(
@@ -187,13 +270,16 @@ class Usuarios extends Component {
                 <Table header={["Nome", "Matrícula"]} data={this.state.data} id_select={this.state.id_user_select} row_select={this.populate_product} filter={true} value_filter={this.value_filter}/>
               </div>
               <button id="button_modal" type="button" style={{display:"none"}} data-toggle="modal" data-target='#create_dealership'> Nova concessionária</button>
+              </div>
+              <div class="col-sm-10">
                 <Modal 
                   id={'create_dealership'} 
-                  header={'Usuário'} 
-                  body={<Table_s header={["Produto"]} data={this.state.product_user} id_select={""} row_select={""} filter={true} />} 
+                  header={'Usuári'} 
+                  body={this.modal_user()} 
                   footer={''}
                 />
-            </div>
+                </div>
+            
         </div>
     )
 }
