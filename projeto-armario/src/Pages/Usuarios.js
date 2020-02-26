@@ -12,6 +12,7 @@ class Usuarios extends Component {
       product_user_e:[],
       row_select: [],
       id_user_select: [],
+      loan: []      
     };
     this.row_select = this.row_select.bind(this);
     this.populate_table = this.populate_table.bind(this);
@@ -21,6 +22,7 @@ class Usuarios extends Component {
     this.modal_user = this.modal_user.bind(this);
     this.row_select = this.row_select.bind(this);
     this.row_select_e = this.row_select_e.bind(this);
+    this.devolute = this.devolute.bind(this);
     // this.table_report_block = false;
   }
 
@@ -57,29 +59,41 @@ class Usuarios extends Component {
 
   async populate_product(value){
     console.log(value.body.id);
+    
+
     document.getElementById("button_modal").click();
     let table = [];
     let aux = [];
     let aux1 = [];
 
-    await fetch("http://localhost:8081/user/"+ value.body.id +"/products", { method: 'GET' })
+    await fetch("http://localhost:8081/loan/"+ value.body.id +"/user", { method: 'GET' })
     .then((resp) => { return resp.json(); })
     .then((data) => {
       console.log(data);
+      this.setState({loan: data});
        data.map((item, i) => {
-         console.log("item.model")
-         console.log(item.model);
-         if(item.loan){
-           let object = {id:null, body:[]}
-           object.id = item.model._id
+         //console.log("item.model")
+         //console.log(item.product);
+          
+           item.product.forEach((resp) => {
+            let object = {id:null, body:[]}
+            console.log("resp"); 
+            console.log(resp);
+            if(resp.loan){
+              object.id = resp._id
+              aux.push(resp.model.name);
+              console.log("item.model.name");
+              console.log(resp.model.name); 
+              object.body = aux;
+              table.push(object);
+              aux = [];
+            }
+            })
+          
+         
            
-           aux.push(item.model.name);
-           console.log("item.model.name");
-           console.log(item.model.name); 
-           object.body = aux;
-           table.push(object);
-           aux = [];
-         }
+          
+         
       });
       console.log("table")
       console.log(table)
@@ -115,6 +129,7 @@ class Usuarios extends Component {
       name: value.get('name'),
       matricula: value.get('matricula'),
     }
+    console.log('data');
     console.log(data);
 
     fetch('http://localhost:8081/user', {
@@ -186,8 +201,8 @@ class Usuarios extends Component {
         </div>
         <div class="col-sm-6">
         <div class="row">
-                        <button type="submit" class="btn btn-success">Devolver</button>
-                      </div>
+          <button type="submit" onClick={this.devolute}class="btn btn-success">Devolver</button>
+        </div>
           <Table_s header={["Produto"]} data={this.state.product_user_e} id_select={""} row_select={this.row_select_e} filter={true} />
         </div>
       </div>
@@ -257,6 +272,25 @@ class Usuarios extends Component {
     this.setState({product_user_e: aux})
   }
 
+  devolute = (value) => {
+    console.log(this.state.product_user_e)
+
+    fetch('http://localhost:8081/loan', {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+        body: JSON.stringify(this.state.product_user_e)
+    }).then(function (res) { return res.json(); })
+      .then(function (data) {
+        if(data != undefined){
+          alert('Produto devolvido com sucesso');
+        } else { 
+          alert('Problema ao devolver produto');  
+        }
+      })
+  }
   render(){
     
     return(

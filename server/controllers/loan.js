@@ -55,6 +55,25 @@ module.exports.get_loan = (req, res) => {
     );
 }
 
+module.exports.devolute = (req, res) => {
+    //console.log(req.body);
+    req.body.forEach((item) => {
+        console.log('item');
+        console.log(item);
+        product_model.update({
+            _id: objectid(item.id)
+        },{
+                $set: {loan: false}
+            }, {new: true},
+            (err, result) =>{
+                if(err) res.status(400).send(err);
+                res.send(result)
+            });
+
+    })
+    
+}
+
 module.exports.get_all_loan = (req, res) => {
     loan_model.find({},
         (err, msg) => {
@@ -71,6 +90,32 @@ module.exports.update_laon = (req, res) => {
             if(err) res.send(err);
             res.status(200).json(result);
         });
+}
+
+module.exports.get_loan_by_user = (req, res) => {
+    loan_model.find({
+        user: objectid(req.params.user_id)
+    })
+    .exec((err, msg) => {
+        var options = {
+            path: 'product',
+            model: 'product'
+      };
+        loan_model.populate(msg, options, (err, resp)=>{
+            if(err) res.send(err);
+            var options = {
+                path: 'product.model',
+                model: 'model'
+            };
+            loan_model.populate(msg, options, (err, resp)=>{
+                if(err) res.send(err)  
+                res.send(msg)
+            })
+            //res.status(200).json(resp.products);
+        })
+       ;
+    })
+        
 }
 
 module.exports.remove_loan = (req, res) => {
