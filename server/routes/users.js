@@ -15,6 +15,14 @@ module.exports = (express) => {
         express.controllers.users.get_all_user(req, res);  
     })
 
+    express.get('/user_pagination/:limit/:skip', (req, res) => { // ok
+        express.controllers.users.user_pagination(req, res);  
+    })
+
+    express.get('/user_count', (req, res) => { // ok
+        express.controllers.users.user_count(req, res);  
+    })
+
     express.put('/user/:user_id', (req, res) => { //ok
         express.controllers.users.update_user(req, res);  
     })

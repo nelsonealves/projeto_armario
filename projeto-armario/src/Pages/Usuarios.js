@@ -201,7 +201,7 @@ class Usuarios extends Component {
         </div>
         <div class="col-sm-6">
         <div class="row">
-          <button type="submit" onClick={this.devolute}class="btn btn-success">Devolver</button>
+          <button type="submit" onClick={this.devolute} class="btn btn-success">Devolver</button>
         </div>
           <Table_s header={["Produto"]} data={this.state.product_user_e} id_select={""} row_select={this.row_select_e} filter={true} />
         </div>

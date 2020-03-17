@@ -15,6 +15,21 @@ module.exports.get_model = (req, res) => {
     model_model.aggregate(
         [{
             $match: {
+                _id: objectid(req.params.provider_id)
+            }
+        }],
+        (err, result) => {
+            if (err) res.send(err);
+            res.status(200).json(result);
+        }
+    );
+}
+
+module.exports.get_model_by_provider = (req, res) => {
+
+    model_model.aggregate(
+        [{
+            $match: {
                 _id: objectid(req.params.model_id)
             }
         }],
@@ -24,6 +39,7 @@ module.exports.get_model = (req, res) => {
         }
     );
 }
+
 
 module.exports.get_all_model = (req, res) => {
     model_model.find({},

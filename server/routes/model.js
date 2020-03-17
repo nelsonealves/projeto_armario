@@ -7,6 +7,10 @@ module.exports = (express) => {
         express.controllers.model.get_model(req, res);  
     })
 
+    express.get('/model/:provider_id', (req, res) => { 
+        express.controllers.model.get_model_by_provider(req, res);  
+    })
+
     express.get('/all_models', (req, res) => { // ok
         express.controllers.model.get_all_model(req, res);  
     })

@@ -70,4 +70,5 @@ class Row_Table extends React.Component {
     }
 }
 
+
 export default Table;

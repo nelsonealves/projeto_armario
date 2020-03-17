@@ -5,10 +5,10 @@ let Schema = mongoose.Schema;
 let objectid = require('mongodb').ObjectID;
 
 let loan_schema = new mongoose.Schema ({
-    product: [{
+    product: {
         type: Schema.ObjectId, 
         ref:'products'  
-    }],
+    },
     user: {
         type: Schema.ObjectId, 
         ref:'user'

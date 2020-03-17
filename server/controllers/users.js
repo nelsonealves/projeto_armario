@@ -17,7 +17,7 @@ module.exports.get_user = (req, res) => {
             $match: {
                 _id: objectid(req.params.user_id)
             }
-        }],
+        }], 
         (err, result) => {
             if (err) res.send(err);
             res.status(200).json(result);
@@ -40,10 +40,31 @@ module.exports.get_by_matricula = (req, res) => {
 }
 
 module.exports.get_all_user = (req, res) => {
-    model_usuario.find({},
+    model_usuario.find({})
+    .exec(
         (err, msg) => {
             if(err) res.send(err);
             res.status(200).json(msg);
+    });
+}
+
+module.exports.user_pagination = (req, res) => {
+    model_usuario.find({})
+    .limit(parseInt(req.params.limit))
+    .skip(parseInt(req.params.skip) * parseInt(req.params.limit))
+    .exec(
+        (err, msg) => {
+            if(err) res.send(err);
+            res.status(200).json(msg);
+    });
+}
+
+module.exports.user_count = (req, res) => {
+    model_usuario.find({})
+    .exec(
+        (err, msg) => {
+            if(err) res.send(err);
+            res.status(200).json(msg.length);
     });
 }
 

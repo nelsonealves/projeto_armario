@@ -9,83 +9,66 @@ class Produtos extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      data: [], // All data products
       row_select: [], // Row select when click in the table
-      id_user_select: [], // Array with id's products
-      data_e: [], 
-      row_select_e:[], 
-      id_user_select_e:[],  
+      row_select_e: [],
+      all_provider: [],
+      provider_table: [],
+      provider_combobox: [], 
+      provider_combobox_selected: [],
       all_product: [], 
       products: [], 
-      cabinet:[], 
-      all_cabinet:[],
-      users: [],
+      cabinet: [], 
+      all_cabinet: [],
       all_users: [],
-      date: new Date(),
     };
-    this.row_select = this.row_select.bind(this);
+    
     this.update_models = this.update_models.bind(this);
     this.form_product = this.form_product.bind(this);
-    this.populate_table = this.populate_table.bind(this);
-    this.populate_users = this.populate_users.bind(this);
-    // this.table_report_block = false;
+    this.update_provider = this.update_provider.bind(this);
+    this.update_cabinet = this.update_cabinet.bind(this);
+    this.add_provider = this.add_provider.bind(this);
   }
 
   componentDidMount(){
     this.update_models();
     this.update_cabinet();
-    this.populate_table();
-    this.populate_users();
+    this.update_provider();
+    
   }
 
-  async populate_table(){
-     
+  //////////////////////////////////////////////// UPDATES /////////////////////////////
+
+  update_provider = async () => {
+    
     let table = [];
     let aux = [];
-  
     
-    await fetch("http://localhost:8081/all_product", { method: 'GET' })
+    await fetch("http://localhost:8081/all_provider", { method: 'GET' })
     .then((resp) => { return resp.json(); })
     .then((data) => {
-      data.map((item, i) => {
-        let object = {id:null, body:[]}
-        if(!item.loan){
+      console.log("ALL PROVIDER");
+      console.log(data);
+      this.setState({all_provider: data});
+        data.map((item, i) => {
+      //    aux.push(data[i].name);
+      let object = {id:null, body:[]}
           object.id = item._id
-          aux.push(item.model.name);
-          aux.push(item.cabinet.name);
+          aux.push(item.name);
           object.body = aux;
           table.push(object);
           aux = [];
-        }
-      });
+        });
       
-      this.setState({ data: table });
-    }).catch((err) => {
-      console.log(err);
-    })
-    
-  }
-
-  async populate_users () {
-    let aux = [];
-    
-    await fetch("http://localhost:8081/all_users", { method: 'GET' })
-    .then((resp) => { return resp.json(); })
-    .then((data) => {
-      data.map((item, i) => {
-        aux.push(data[i].matricula);
-      });
-      aux.sort();
-      this.setState({all_users: data});
-      this.setState({users: aux});
+        this.setState({provider_table: table});
      }).catch((err) => {
        console.log(err);
      })
+
   }
 
   async update_models () {
     let aux = [];
-    
+    let combobox = [];
     await fetch("http://localhost:8081/all_models", { method: 'GET' })
     .then((resp) => { return resp.json(); })
     .then((data) => {
@@ -98,6 +81,14 @@ class Produtos extends Component {
      }).catch((err) => {
        console.log(err);
      })
+
+     this.state.all_provider.map((item) => {
+       combobox.push(item.name)
+     });
+
+     console.log("COMBOBOXX");
+     console.log(combobox);
+     this.setState({provider_combobox: combobox});
   }
 
   async update_cabinet () {
@@ -116,15 +107,22 @@ class Produtos extends Component {
      })
   }
 
+  ////////////////////////////////////////////////// FORMS //////////////////////////
+
   form_model = () => {
     return (
       <div>
         <div className='row'>
           <div className='col-sm-12'>
+          <div class="form-group">
+              <label for="pwd"><b>Fornecedor:</b></label>
+              <Combobox name={"product"} option={this.state.provider_combobox} />
+            </div>
             <div class="form-group">
               <label for="pwd"><b>Modelo:</b></label>
               <input type="input" name="model" class="form-control" />
             </div>
+            
           </div>
         </div>
       </div>
@@ -139,7 +137,7 @@ class Produtos extends Component {
           <div className='col-sm-12'>
             <div class="form-group">
               <label for="pwd"><b>Modelo:</b></label>
-              <Combobox name={"product"} option={this.state.products} />
+             
             </div>
             <div class="form-group">
               <label for="pwd"><b>Quantidade:</b></label>
@@ -153,6 +151,46 @@ class Produtos extends Component {
         </div>
       </div>
     )
+  }
+  
+  form_provider = () => {
+    return (
+      <div>
+        <div class="form-group">
+          <div className='row'>
+            <label for="pwd"><b>Fornecedor:</b></label>
+          </div>
+          <div className='row'>
+            <input type="input" name="provider" class="form-control" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+  
+  ////////////////////////////////////////////////////////// ADD /////////////////////////////////
+  add_provider = async (value) => {
+    let data = {
+      name: value.get('provider'),
+    }
+
+    await fetch('http://localhost:8081/provider', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+        body: JSON.stringify(data)
+    }).then(function (res) { return res.json();})
+      .then(function (data) {
+        if(data !== undefined){
+          alert('Modelo adicionado com sucesso');
+          
+        } else { 
+          alert('Problema ao adicionar modelo');  
+        }
+      })
+      this.update_provider();
   }
   
 
@@ -226,171 +264,74 @@ class Produtos extends Component {
       })
   }
 
-  row_select = (value) => {
-    console.log("value.body")
-    console.log(value.body);
-    // console.log(value);
-    let aux = [];
-    let aux_e = [];
-    
-    aux = this.state.data;
-    aux_e = this.state.data_e;
-    //console.log(this.state.data_e);
+  /////////////////////////////////////////////////////////// SELECT /////////////////////////
 
-    aux_e.push(value.body);
-    aux.forEach((element, id) => {
-      console.log("element.id");
-      console.log(element.id);
-      console.log("value.id");
-      console.log(value.body.id);
-      if(element.id == value.body.id){
-        console.log("encontrou");
-        console.log(id)
-        aux.splice(id,1);
-      }
-    })
-    // console.log("auxe body")
-    // console.log(aux_e)
-    // aux1_e.push(value.body)
-    this.setState({data: aux})
-    this.setState({data_e: aux_e})
+  click = (value) => {
+  
+    let action = {
+      "Fornecedor": this.update_provider(),
+      "Modelo": this.update_models(),
+      "Produto": this.update_cabinet() && this.update_models()
+    };
+    action[value.target.innerHTML];
+  
   }
 
-  row_select_e = (value) => {
-    console.log("OPAAA");
-    let aux = [];
-    let aux_e = [];
-    
-    aux = this.state.data_e;
-    aux_e = this.state.data;
-    //console.log(this.state.data_e);
-    aux_e.push(value.body);
-    
-    
-    aux.forEach((element, id) => {
-      console.log("element.id");
-      console.log(element.id);
-      console.log("value.id");
-      console.log(value.body.id);
-      if(element.id == value.body.id){
-        console.log("encontrou");
-        console.log(id)
-        aux.splice(id,1);
-      }
-    })
-    console.log("aux");
-    console.log(aux);
-    console.log("aux_e");
-    console.log(aux_e);
-   
-    this.setState({data: aux_e})
-    this.setState({data_e: aux})
+  select_provider = (value) => {
+    console.log("selecionado");
+    console.log(value);
+    document.getElementById("button_provider").click();
   }
-
-  add_product_user = event => {
-    let data = {}
-    let aux_product = [];
-    event.preventDefault();
-    let user = new FormData(event.target);
-    
-    let user_name = user.get("user");
-    
-    // Adding user
-    this.state.all_users.forEach(item => {
-      if(item.matricula === user_name){
-        data.user = item._id;
-      }
-    });
-    // Adding products
-    this.state.data_e.forEach(item => {
-      aux_product.push(item.id);
-    });
-    data.product = aux_product;
-    // Adding Date
-    data.date = this.state.date;
-
-    // Adding return
-    if(user.get("return") == null) {
-      data.return = false;
-    } else {
-      data.return = true
-    }
-    
-    
-    console.log(data);
-    
-    
-    fetch('http://localhost:8081/loan', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-        body: JSON.stringify(data)
-    }).then(function (res) { return res.json(); })
-      .then(function (data) {
-        if(data != undefined){
-          alert('Empréstimo realizado');
-        } else { 
-          alert('Problema ao realizar empréstimo');  
-        }
-      })
-  }
-
-  onChange = date => this.setState({ date: date })
 
   render(){
     
     return(
         <div>
             <div class="col-sm-6">
-                <div className="row"> 
-                    <a class="accordion-toggle" data-toggle="collapse" href="#demo1">Novo Modelo</a>
-                    <div id="demo1" class="collapse">
-                      <div className="row">      
-                        <Form form={this.form_model()} return={this.add_model}/>
-                      </div>
-                    </div>
-                </div>
-                <div className="row">
-                  <a class="accordion-toggle" data-toggle="collapse" href="#demo2">Novo Produto</a>
-                  <div id="demo2" class="collapse">
-                      <Form form={this.form_product()} return={this.add_product}/>
-                  </div>
-                </div> 
-                </div>
-                <div className="row">
-                  <div class="col-sm-6">
-                    <Table header={["Nome", "Local"]} data={this.state.data} id_select={this.state.id_user_select} row_select={this.row_select} filter={true} />
-                  </div>
-                  <div class="col-sm-6">
-                    <form className='form' onSubmit={this.add_product_user}>
-                      <div class="form-group">
-                        <div class="row">
-                          <Combobox name={"user"} option={this.state.users} />
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="custom-control custom-switch">
-                          <input type="checkbox" name="return" class="custom-control-input" id="customSwitches"/>
-                          <label class="custom-control-label" for="customSwitches">Produto será devolvido?</label>
-                        </div>
-                        <div>
-                          <DatePicker
-                          onChange={this.onChange}
-                          selected={this.state.date}
-                          />
-                        </div>
-                      </div>
-                      <div class="row">
-                        <button type="submit" class="btn btn-success">Adicionar</button>
-                      </div>
-                    </form>
+                
+            <ul class="nav nav-tabs">
+              <li class="nav-item" onClick={this.click}>
+                <a class="nav-link" data-toggle="tab" href="#home">Fornecedor</a>
+              </li>
+              <li class="nav-item" onClick={this.click}>
+                <a class="nav-link" data-toggle="tab" href="#menu1">Modelo</a>
+              </li>
+              <li class="nav-item" onClick={this.click}>
+                <a class="nav-link" data-toggle="tab" href="#menu2">Produto</a>
+              </li>
+            </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane active container" id="home" >
+                    <Form form={this.form_provider()} return={this.add_provider}/>
                     <div class="row">
-                    <Table header={["Nome", "Local"]} data={this.state.data_e} id_select={this.state.id_user_select_e} row_select={this.row_select_e} filter={true} />
+                      <Table 
+                        header={["Nome"]} 
+                        data={this.state.provider_table} 
+                        id_select={this.state.id_user_select} 
+                        row_select={this.select_provider} 
+                        filter={true} 
+                      />
+                      <button id="button_provider" type="button" style={{display:"none"}} data-toggle="modal" data-target='#show_provider'> Nova concessionária</button>
+                      <Modal 
+                        id={'show_provider'}
+                        header={'Usuário'} 
+                        body={""}
+                        footer={''}
+                      />
                     </div>
+                 </div>
+                <div class="tab-pane container" id="menu1">
+                    <div className="row">      
+                      <Form form={this.form_model()} return={this.add_model}/>
+                    </div>
+                </div>
+                <div class="tab-pane container" id="menu2">
+                      <Form form={this.form_product()} return={this.add_product}/>
+                </div> 
                   </div>
-            </div>
+                </div>
+                
         </div>
     )
 }

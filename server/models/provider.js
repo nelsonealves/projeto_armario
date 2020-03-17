@@ -4,10 +4,9 @@ let mongoose = require('../database');
 let Schema = mongoose.Schema;
 let objectid = require('mongodb').ObjectID;
 
-let cabinet_schema = new mongoose.Schema ({
-    number: String,
+let provider_schema = new mongoose.Schema ({
     name: String,
-    },{collection: 'cabinet'}
+    },{collection: 'provider'}
 );
 
-module.exports = cabinet_schema;
+module.exports = provider_schema;
