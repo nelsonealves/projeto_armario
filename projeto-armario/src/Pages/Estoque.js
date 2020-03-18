@@ -53,6 +53,7 @@ class Estoque extends Component {
     .then((data) => {
       data.map((item, i) => {
         let object = {id:null, body:[]}
+        console.log(item)
         if(!item.loan){
           object.id = item._id
           aux.push(item.model.name);
@@ -63,6 +64,8 @@ class Estoque extends Component {
         }
       });
       
+      console.log("TABLEEEE")
+      console.log(table);
       this.setState({ data: table });
     }).catch((err) => {
       console.log(err);
@@ -72,37 +75,28 @@ class Estoque extends Component {
 
 
   row_select = (value) => {
-    console.log("value.body")
-    console.log(value.body);
-    // console.log(value);
+    
     let aux = [];
     let aux_e = [];
     
     aux = this.state.data;
     aux_e = this.state.data_e;
-    //console.log(this.state.data_e);
-
+    
     aux_e.push(value.body);
     aux.forEach((element, id) => {
-      console.log("element.id");
-      console.log(element.id);
-      console.log("value.id");
-      console.log(value.body.id);
+    
       if(element.id == value.body.id){
-        console.log("encontrou");
-        console.log(id)
+    
         aux.splice(id,1);
       }
     })
-    // console.log("auxe body")
-    // console.log(aux_e)
-    // aux1_e.push(value.body)
+    
     this.setState({data: aux})
     this.setState({data_e: aux_e})
   }
 
   row_select_e = (value) => {
-    console.log("OPAAA");
+    
     let aux = [];
     let aux_e = [];
     
@@ -113,65 +107,50 @@ class Estoque extends Component {
     
     
     aux.forEach((element, id) => {
-      console.log("element.id");
-      console.log(element.id);
-      console.log("value.id");
-      console.log(value.body.id);
+      
       if(element.id == value.body.id){
-        console.log("encontrou");
-        console.log(id)
+        
         aux.splice(id,1);
       }
     })
-    console.log("aux");
-    console.log(aux);
-    console.log("aux_e");
-    console.log(aux_e);
-   
+    
     this.setState({data: aux_e})
     this.setState({data_e: aux})
   }
 
-  add_product_user = event => {
-    let data = {}
+  add_product_user = async event => {
+    let data_loan = [];
     let aux_product = [];
     event.preventDefault();
     let user = new FormData(event.target);
-    
     let user_name = user.get("user");
     
-    // Adding user
-    this.state.all_users.forEach(item => {
-      if(item.matricula === user_name){
-        data.user = item._id;
-      }
-    });
-    // Adding products
     this.state.data_e.forEach(item => {
-      aux_product.push(item.id);
+      let data = {}
+      this.state.all_users.forEach(item => {
+        if(item.matricula === user_name){
+          data.user = item._id;
+        }
+      });
+      data.date = this.state.date;
+      console.log("DATAAAA")
+      data.product = item.id;
+      console.log(item.id);
+      if(user.get("return") == null) {
+        data.return = false;
+      } else {
+        data.return = true
+      }
+      data_loan.push(data)
     });
-    data.product = aux_product;
-    // Adding Date
-    data.date = this.state.date;
-
-    // Adding return
-    if(user.get("return") == null) {
-      data.return = false;
-    } else {
-      data.return = true
-    }
     
-    
-    console.log(data);
-    
-    
-    fetch('http://localhost:8081/loan', {
+    await fetch('http://localhost:8081/loan', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data_loan)
     }).then(function (res) { return res.json(); })
       .then(function (data) {
         if(data != undefined){
@@ -180,6 +159,8 @@ class Estoque extends Component {
           alert('Problema ao realizar empréstimo');  
         }
       })
+
+      this.setState({data_e: []})
   }
 
   onChange = date => this.setState({ date: date })

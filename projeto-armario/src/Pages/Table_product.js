@@ -5,6 +5,8 @@ class Table extends React.Component {
     constructor(props){
         super(props);
         
+        
+            
     }
    
     row_select(key){
@@ -16,10 +18,13 @@ class Table extends React.Component {
     componentDidMount(){
         let filter = document.querySelector('.filter');
         filter.addEventListener('keyup', (word) => {
-            //console.log(filter.value);
+            console.log(filter.value);
             this.props.value_filter(filter.value);
             
+            
         });
+        
+       
     }
     render(){
         let filter;

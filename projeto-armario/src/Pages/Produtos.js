@@ -12,10 +12,12 @@ class Produtos extends Component {
       row_select: [], // Row select when click in the table
       row_select_e: [],
       all_provider: [],
+      all_product: [],
       provider_table: [],
       provider_combobox: [], 
       provider_combobox_selected: [],
-      all_product: [], 
+      model_combobox: [],
+      all_model: [], 
       products: [], 
       cabinet: [], 
       all_cabinet: [],
@@ -66,13 +68,40 @@ class Produtos extends Component {
 
   }
 
+  update_products = async () => {
+    let aux = [];
+    let combobox = [];
+    await fetch("http://localhost:8081/all_product", { method: 'GET' })
+    .then((resp) => { return resp.json(); })
+    .then((data) => {
+      console.log("ALL PRODUCTS");
+      console.log(data);
+      // this.setState({all_products: data});
+      //  data.map((item, i) => {
+      //    aux.push(data[i].name);
+        
+      //  });
+      //    this.setState({ products: aux});
+     }).catch((err) => {
+       console.log(err);
+     })
+
+    //  this.state.all_provider.map((item) => {
+    //    combobox.push(item.name)
+    //  });
+
+    //  console.log("COMBOBOXX");
+    //  console.log(combobox);
+     //this.setState({provider_combobox: combobox});
+  }
+
   async update_models () {
     let aux = [];
     let combobox = [];
     await fetch("http://localhost:8081/all_models", { method: 'GET' })
     .then((resp) => { return resp.json(); })
     .then((data) => {
-      this.setState({all_product: data});
+      this.setState({all_model: data});
        data.map((item, i) => {
          aux.push(data[i].name);
         
@@ -116,7 +145,7 @@ class Produtos extends Component {
           <div className='col-sm-12'>
           <div class="form-group">
               <label for="pwd"><b>Fornecedor:</b></label>
-              <Combobox name={"product"} option={this.state.provider_combobox} />
+              <Combobox name={"provider"} option={this.state.provider_combobox} />
             </div>
             <div class="form-group">
               <label for="pwd"><b>Modelo:</b></label>
@@ -137,16 +166,17 @@ class Produtos extends Component {
           <div className='col-sm-12'>
             <div class="form-group">
               <label for="pwd"><b>Modelo:</b></label>
-             
-            </div>
-            <div class="form-group">
-              <label for="pwd"><b>Quantidade:</b></label>
-              <input type="input" name="quantidade" class="form-control" />
+              <Combobox name={"model"} option={this.state.products} />
             </div>
             <div class="form-group">
               <label for="pwd"><b>Armário:</b></label>
               <Combobox name={"cabinet"} option={this.state.cabinet} />
             </div>
+            <div class="form-group">
+              <label for="pwd"><b>Quantidade:</b></label>
+              <input type="input" name="quantidade" class="form-control" />
+            </div>
+            
           </div>
         </div>
       </div>
@@ -198,8 +228,15 @@ class Produtos extends Component {
     
     let data = {
       name: value.get('model'),
+      provider: value.get('provider')
     }
 
+    this.state.all_provider.map((item, i) =>{
+      if(item.name == data.provider){
+        data.provider = item._id
+      }
+    });
+    
     fetch('http://localhost:8081/model', {
       method: 'POST',
       headers: {
@@ -220,17 +257,15 @@ class Produtos extends Component {
   add_product = (value) => {
     
     let data = {
-      name: value.get('product'),
+      name: value.get('model'),
       qtd: value.get('quantidade'),
       cabinet: value.get('cabinet'),
       id_model: null,
       id_cabinet: null
     }
     let aux = [];
-    console.log(data);
-    console.log("this.state.all_product");
-    console.log(this.state.all_product);
-    this.state.all_product.map(item => {
+    
+    this.state.all_model.map(item => {
       if(item.name == data.name){
         data.id_model = item._id;
       }
@@ -245,8 +280,10 @@ class Produtos extends Component {
     for(let i=0; i < data.qtd; i++){
       aux.push({model:data.id_model, cabinet: data.id_cabinet});
     }
-    console.log("OLHA O AUX");
+    
+
     console.log(aux);
+
     fetch('http://localhost:8081/products', {
       method: 'POST',
       headers: {
@@ -270,7 +307,7 @@ class Produtos extends Component {
   
     let action = {
       "Fornecedor": this.update_provider(),
-      "Modelo": this.update_models(),
+      "Modelo": this.update_models() && this.update_products(),
       "Produto": this.update_cabinet() && this.update_models()
     };
     action[value.target.innerHTML];

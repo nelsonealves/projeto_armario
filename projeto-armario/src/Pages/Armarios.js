@@ -52,14 +52,13 @@ class Usuarios extends Component {
     )
   }
 
-  add_device = (value) => {
+  add_device = async (value) => {
     let data = {
       name: value.get('name'),
       
     }
-    console.log(data);
-
-    fetch('http://localhost:8081/cabinet', {
+    
+    await fetch('http://localhost:8081/cabinet', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -72,10 +71,11 @@ class Usuarios extends Component {
           alert('Usuário adicionado com sucesso');
         } else { 
           alert('Problema ao adicionar usuário');  
+      
         }
       })
-      console.log(this);
       
+      this.populate_table();
   }
   
   row_select = (value) => {

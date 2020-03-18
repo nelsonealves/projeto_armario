@@ -74,9 +74,9 @@ class Form extends Component {
         return(
             <form className='form' onSubmit={this.submit}>
                 {this.props.form}
-                <div className='row'>
+                
                     <input type="submit" className="btn btn-success btn-sm" value="Adicionar"/>
-                </div>
+                
             </form>
         )
     }
@@ -85,6 +85,10 @@ class Form extends Component {
 class Combobox extends Component {
     constructor(props){
         super(props);
+    }
+
+    onChange = (value) => {
+        console.log(value.target.value);
     }
 
     render(){
