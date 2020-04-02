@@ -1,18 +1,26 @@
 # projeto_armario
 
-Preparando o ambiente:
-Na pasta raiz do projeto executar: >sh install.sh
+## Preparando o ambiente:
+Na pasta raiz do projeto executar: 
+```console
+>sh install.sh
+```
 
-Rodando servidor e aplicação web:
-Também na raiz do projeto abrir dois terminais.
+## Rodando servidor e aplicação web:
+1. Também na raiz do projeto abrir dois terminais.
 
-Terminal 1:
- /projeto_armario> cd server
- /projeto_armario> node server.js
+### Terminal 1:
+```console
+/projeto_armario> cd server
+/projeto_armario> node server.js
+```
+### Terminal 2:
+```console
+/projeto_armario> cd projeto-armario
+/projeto_armario> npm start
+```
 
-Terminal 2:
- /projeto_armario> cd projeto-armario
- /projeto_armario> npm start
-
-Depois, abrir navegador e acessar aplicação através de:
+2. Depois, abrir navegador e acessar aplicação através de:
+```
 http://localhost:3000
+```
