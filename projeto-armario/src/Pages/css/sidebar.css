@@ -50,3 +50,15 @@ body {
   .sidebar-top img{
     width: 100%
   }
+  .icon-style {
+      display: table-cell;
+      text-align:center;
+      vertical-align: middle;
+  }
+  .centerly {
+    
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    
+  }
