@@ -8,7 +8,7 @@ import BusinessCenter from '@material-ui/icons/BusinessCenter';
 import PhoneIphone from '@material-ui/icons/PhoneIphone';
 
 
-class Search extends Component {
+class Search_Model extends Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -53,7 +53,7 @@ class Search extends Component {
     select_search = () => {
         return (
             <div>
-                <div onClick={() => {this.onSubmit('/')}} >
+                <div onClick={() => {this.onSubmit('/search')}} >
                     <div className="row">
                         <div className="text-left" className="col-4">
                             <i className="material-icons">keyboard_backspace</i>
@@ -61,22 +61,9 @@ class Search extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <b>Selecione a opção na qual deseja realizar a busca:</b>
+                    <b>SEARCH FOR MODEL</b>
                 </div>
-                <div className="row">
-                    <div onClick={() => {this.onSubmit('/search_cabinet')}} class="col-4">
-                            <div class="row"><div className="text-center centerly"><Kitchen/></div></div>
-                            <div class="row"><div className="centerly"><span class="my-auto">Por armário</span></div></div>
-                    </div>
-                    <div onClick={() => {this.onSubmit('/search_provider')}} class="col-4">
-                            <div class="row"><div className="text-center centerly"><BusinessCenter/></div></div>
-                            <div class="row"><div className="centerly"><span class="my-auto">Por fornecedor</span></div></div>
-                    </div>
-                    <div onClick={() => {this.onSubmit('/search_model')}} class="col-4">
-                            <div class="row"><div className="text-center centerly"><PhoneIphone/></div></div>
-                            <div class="row"><div className="centerly"><span class="my-auto">Por modelo</span></div></div>
-                    </div>
-                </div>
+                
             </div>
         )
     }
@@ -94,4 +81,4 @@ class Search extends Component {
     }
 }
 
-export default Search;
+export default Search_Model;
