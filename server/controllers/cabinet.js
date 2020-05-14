@@ -15,7 +15,7 @@ let objectid = require('mongodb').ObjectID;
         model_cabinet.aggregate(
             [{
                 $match: {
-                    _id: objectid(req.params.cabinet_id)
+                    code: req.params.cabinet_id
                 }
             }],
             (err, result) => {

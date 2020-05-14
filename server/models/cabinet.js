@@ -5,8 +5,9 @@ let Schema = mongoose.Schema;
 let objectid = require('mongodb').ObjectID;
 
 let cabinet_schema = new mongoose.Schema ({
-    number: String,
-    name: String,
+    code: String,
+    shelf: String,
+    cabinet: String,
     },{collection: 'cabinet'}
 );
 

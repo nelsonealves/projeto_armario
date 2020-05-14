@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {Combobox, Modal, Form, Tab} from './Utils.js'
 import DatePicker from 'react-datepicker';
 import Table from './Table_product.js'
+import history from './../history';
 
 class Estoque extends Component {
   constructor(props) {
@@ -19,10 +20,10 @@ class Estoque extends Component {
   }
 
   componentDidMount(){
-    
-    
-    this.populate_table();
-    this.populate_users();
+    console.log("this.props.body");
+    console.log(this.props.data);
+    this.setState({data: this.props.data.body})
+   
   }
 
   async populate_users () {
@@ -42,40 +43,40 @@ class Estoque extends Component {
      })
   }
 
-  async populate_table(){
+  // async populate_table(){
      
-    let table = [];
-    let aux = [];
+  //   let table = [];
+  //   let aux = [];
   
     
-    await fetch("http://localhost:8081/all_product", { method: 'GET' })
-    .then((resp) => { return resp.json(); })
-    .then((data) => {
-      data.map((item, i) => {
-        let object = {id:null, body:[]}
-        console.log(item)
-        if(!item.loan){
-          object.id = item._id
-          aux.push(item.model.name);
-          aux.push(item.cabinet.name);
-          object.body = aux;
-          table.push(object);
-          aux = [];
-        }
-      });
+  //   await fetch("http://localhost:8081/all_product", { method: 'GET' })
+  //   .then((resp) => { return resp.json(); })
+  //   .then((data) => {
+  //     data.map((item, i) => {
+  //       let object = {id:null, body:[]}
+  //       console.log(item)
+  //       if(!item.loan){
+  //         object.id = item._id
+  //         aux.push(item.model.name);
+  //         aux.push(item.cabinet.name);
+  //         object.body = aux;
+  //         table.push(object);
+  //         aux = [];
+  //       }
+  //     });
       
-      console.log("TABLEEEE")
-      console.log(table);
-      this.setState({ data: table });
-    }).catch((err) => {
-      console.log(err);
-    })
+  //     console.log("TABLEEEE")
+  //     console.log(table);
+  //     this.setState({ data: table });
+  //   }).catch((err) => {
+  //     console.log(err);
+  //   })
     
-  }
+  // }
 
 
   row_select = (value) => {
-    
+  
     let aux = [];
     let aux_e = [];
     
@@ -95,8 +96,8 @@ class Estoque extends Component {
     this.setState({data_e: aux_e})
   }
 
-  row_select_e = (value) => {
-    
+   row_select_e = (value) => {
+     
     let aux = [];
     let aux_e = [];
     
@@ -165,11 +166,24 @@ class Estoque extends Component {
 
   onChange = date => this.setState({ date: date })
   
+  onSubmit = (path) => {
+    history.push(path);
+  }
+
+  
   render(){
     return(
+      <React.Fragment>
+      <div onClick={() => {this.props.back()}} >
+                    <div className="row">
+                        <div className="text-left" className="col-4">
+                            <i className="material-icons">keyboard_backspace</i>
+                        </div>
+                    </div>
+                </div>
       <div className="row">
       <div class="col-sm-6">
-        <Table header={["Nome", "Local"]} data={this.state.data} id_select={this.state.id_user_select} row_select={this.row_select} filter={true} />
+        <Table header={this.props.data.header} data={this.props.data.body} id_select={this.state.id_user_select} row_select={this.row_select} filter={true} />
       </div>
       <div class="col-sm-6">
         <form className='form' onSubmit={this.add_product_user}>
@@ -199,6 +213,7 @@ class Estoque extends Component {
         </div>
       </div>
 </div>
+  </React.Fragment>
     )
 }
 }

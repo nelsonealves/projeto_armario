@@ -97,7 +97,7 @@ class Combobox extends Component {
                 {
                     Object.keys(this.props.option).map(function(key) {
                         return(
-                            <option>{this.props.option[key]}</option>
+                            <option class={this.props.option[key].id}>{this.props.option[key].name}</option>
                         )
                     }.bind(this))
                 }

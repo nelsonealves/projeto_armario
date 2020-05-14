@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
+import Estoque from './Estoque.js'
 
 import Kitchen from '@material-ui/icons/Kitchen';
 import BusinessCenter from '@material-ui/icons/BusinessCenter';
@@ -23,11 +24,11 @@ class Search_Cabinet extends Component {
             all_models: null,
             all_products: null,
             all_cabinet: null,
-            open: true
+            result: null
         };
         this.onSubmit = this.onSubmit.bind(this);
-        this.use = this.useStyles.bind(this);
-
+        this.get_cabinet = this.get_cabinet.bind(this);
+        
         
           
     }
@@ -73,10 +74,50 @@ class Search_Cabinet extends Component {
       });
     }
 
-    get_cabinet = () => {
-        console.log("abre modal");
-    }
+    get_cabinet = (cabinet) => {
+        console.log(cabinet);
+        fetch("http://localhost:8081/cabinet/"+cabinet, { method: 'GET' })
+        .then((resp) => { return resp.json(); })
+        .then((data) => {
+            console.log(data);
+            fetch("http://localhost:8081/product/"+data[0]._id+"/cabinet", { method: 'GET' })
+            .then((resp) => { return resp.json(); })
+            .then((data) => {
+                let table= []
+                let aux = [];
+                console.log("OLHA O DATA AI PORRA");
+                console.log(data);
+                data.map(item => {
+                    let object = {id:null, body:[]}
+                        console.log(item)
+                        if(!item.loan){
+                        object.id = item._id
+                        aux.push(item.model.provider.name);
+                        aux.push(item.model.name);
+                        object.body = aux;
+                        table.push(object);
+                        aux = [];
+                    }
+                });
+                let props = {
+                    header: ['Fabricante', 'Modelo'],
+                    body: table
+                }
+                console.log("props");
+                console.log(props);
+                this.setState({content: <Estoque data={props} back={this.back}/>});
+            
+            }).catch((err) => {
+                console.log(err);
+            })
+        }).catch((err) => {
+        console.log(err);
+        })
 
+    }
+    back = () => {
+        this.home();
+    }
     select_search = (props) => {
         const classes = this.useStyles();
           console.log("classes");
@@ -100,13 +141,13 @@ class Search_Cabinet extends Component {
                             <strong>Armário 1</strong>
                             <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
                                 <Grid  item >
-                                    <Paper onClick={()=>{this.get_cabinet()}} className={classes.paper}>Prat.1</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a1p1")}} style={{textAlign:"center"}} className={classes.paper}>Prat.1</Paper>
                                 </Grid>
                                 <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a1p2")}} style={{textAlign:"center"}} className={classes.paper}>Prat.2</Paper>
                                 </Grid>
                                 <Grid item>
-                                <Paper className={classes.paper}>Prat.3</Paper>
+                                <Paper onClick={()=>{this.get_cabinet("a1p3")}} style={{textAlign:"center"}} className={classes.paper}>Prat.3</Paper>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -114,13 +155,13 @@ class Search_Cabinet extends Component {
                             <strong>Armário 2</strong>
                             <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
                                 <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a2p1")}} style={{textAlign:"center"}} className={classes.paper}>Prat.1</Paper>
                                 </Grid>
                                 <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a2p2")}} style={{textAlign:"center"}} className={classes.paper}>Prat.2</Paper>
                                 </Grid>
                                 <Grid item>
-                                <Paper className={classes.paper}>Prat.3</Paper>
+                                <Paper onClick={()=>{this.get_cabinet("a2p3")}} style={{textAlign:"center"}} className={classes.paper}>Prat.3</Paper>
                                 </Grid>
                             </Grid>
                             
@@ -129,13 +170,13 @@ class Search_Cabinet extends Component {
                             <strong>Armário 3</strong>
                             <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
                                 <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a3p1")}} style={{textAlign:"center"}} className={classes.paper}>Prat.1</Paper>
                                 </Grid>
                                 <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a3p2")}} style={{textAlign:"center"}} className={classes.paper}>Prat.2</Paper>
                                 </Grid>
                                 <Grid item>
-                                <Paper className={classes.paper}>Prat.3</Paper>
+                                <Paper onClick={()=>{this.get_cabinet("a3p3")}} style={{textAlign:"center"}}  className={classes.paper}>Prat.3</Paper>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -143,13 +184,13 @@ class Search_Cabinet extends Component {
                             <strong>Armário 4</strong>
                             <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
                                 <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a4p1")}} style={{textAlign:"center"}} className={classes.paper}>Prat.1</Paper>
                                 </Grid>
                                 <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a4p2")}} style={{textAlign:"center"}} className={classes.paper}>Prat.2</Paper>
                                 </Grid>
                                 <Grid item>
-                                <Paper className={classes.paper}>Prat.3</Paper>
+                                <Paper onClick={()=>{this.get_cabinet("a4p3")}} style={{textAlign:"center"}} className={classes.paper}>Prat.3</Paper>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -157,13 +198,13 @@ class Search_Cabinet extends Component {
                             <strong>Armário 5</strong>
                             <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
                                 <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a5p1")}} style={{textAlign:"center"}} className={classes.paper}>Prat.1</Paper>
                                 </Grid>
                                 <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a5p2")}} style={{textAlign:"center"}} className={classes.paper}>Prat.2</Paper>
                                 </Grid>
                                 <Grid item>
-                                    <Paper className={classes.paper}>Prat.3</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a5p3")}} style={{textAlign:"center"}} className={classes.paper}>Prat.3</Paper>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -171,111 +212,19 @@ class Search_Cabinet extends Component {
                             <strong>Armário 6</strong>
                             <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
                                 <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a6p1")}} style={{textAlign:"center"}} className={classes.paper}>Prat.1</Paper>
                                 </Grid>
                                 <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a6p2")}} style={{textAlign:"center"}} className={classes.paper}>Prat.2</Paper>
                                 </Grid>
                                 <Grid item>
-                                    <Paper className={classes.paper}>Prat.3</Paper>
+                                    <Paper onClick={()=>{this.get_cabinet("a6p3")}} style={{textAlign:"center"}} className={classes.paper}>Prat.3</Paper>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
                 </div>
-                <div className={classes.root}>
-                    <div className="row">
-                        Armário IXIA
-                    </div>
-                    <Grid container spacing={3}>
-                        
-                        <Grid item xs={2}>
-                            <strong>Armário 1</strong>
-                            <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
-                                <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
-                                </Grid>
-                                <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
-                                </Grid>
-                                <Grid item>
-                                <Paper className={classes.paper}>Prat.3</Paper>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <strong>Armário 2</strong>
-                            <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
-                                <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
-                                </Grid>
-                                <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
-                                </Grid>
-                                <Grid item>
-                                <Paper className={classes.paper}>Prat.3</Paper>
-                                </Grid>
-                            </Grid>
-                            
-                        </Grid>
-                        <Grid item xs={2}>
-                            <strong>Armário 3</strong>
-                            <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
-                                <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
-                                </Grid>
-                                <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
-                                </Grid>
-                                <Grid item>
-                                <Paper className={classes.paper}>Prat.3</Paper>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <strong>Armário 4</strong>
-                            <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
-                                <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
-                                </Grid>
-                                <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
-                                </Grid>
-                                <Grid item>
-                                <Paper className={classes.paper}>Prat.3</Paper>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <strong>Armário 5</strong>
-                            <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
-                                <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
-                                </Grid>
-                                <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
-                                </Grid>
-                                <Grid item>
-                                    <Paper className={classes.paper}>Prat.3</Paper>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <strong>Armário 6</strong>
-                            <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
-                                <Grid item >
-                                    <Paper className={classes.paper}>Prat.1</Paper>
-                                </Grid>
-                                <Grid item>
-                                    <Paper className={classes.paper}>Prat.2</Paper>
-                                </Grid>
-                                <Grid item>
-                                    <Paper className={classes.paper}>Prat.3</Paper>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </div>
+                
                 
             </div>
         )
@@ -284,26 +233,20 @@ class Search_Cabinet extends Component {
     handleClose = () => {
         console.log("fechar");
     }
-    body = () => {
+    render_result = (data) => {
+
         return (
             <div>volta</div>
         )
     }
+
     render(){
         return(
             <div>
-                <Modal
-                    open={true}
-                    
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                >
-                    {this.body}
-                </Modal>
-           
                     <div>
                         <div class="container">
                             {this.state.content}
+                            
                         </div>
                     </div>
             </div>

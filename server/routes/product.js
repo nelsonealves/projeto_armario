@@ -15,6 +15,14 @@ module.exports = (express) => {
         express.controllers.product.get_a_product(req, res);  
     })
 
+    express.get('/product/:cabinet_id/cabinet', (req, res) => {
+        express.controllers.product.get_by_cabinet(req, res);  
+    })
+
+    express.get('/product/:model_id/model', (req, res) => {
+        express.controllers.product.get_by_model(req, res);  
+    })
+    
     express.put('/product/:product_id', (req, res) => {
         express.controllers.product.update_product(req, res);  
     })

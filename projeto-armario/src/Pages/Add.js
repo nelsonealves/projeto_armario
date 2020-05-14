@@ -48,7 +48,7 @@ class Add extends Component {
     get_combobox = (object, name_, option) =>{
         let aux = [];
         object.map( item => {
-            aux.push(item[option])
+            aux.push({id: item._id, name: item[option]});
         });
         return <Combobox name={name_} option={aux} />
     }
@@ -93,7 +93,7 @@ class Add extends Component {
       ///////////////////////////////////// ADD FORM PRODUCT////////////////////////////////////////
     add_form_product = () => {
         let comb_model = this.get_combobox(this.state.all_models, "models", "name");
-        let comb_cabinet = this.get_combobox(this.state.all_cabinet, "cabinet", "name");
+        let comb_cabinet = this.get_combobox(this.state.all_cabinet, "cabinet", "code");
         this.setState({content: this.form_product(comb_cabinet, comb_model)})
     }
     form_product = (comb_cabinet, comb_model) => {
@@ -105,26 +105,72 @@ class Add extends Component {
 
             <div className='row'>
               <div className='col-sm-12'>
+              <form className='form' onSubmit={this.add_product}>                  
                 <div className="form-group">
-                  <label htmlFor="pwd"><b>Então selecione o modelo,</b></label>
+                  <label htmlFor="model"><b>Então selecione o modelo,</b></label>
                     {comb_model}                 
                 </div>
                 <div className="form-group">
-                  <label htmlFor="pwd"><b>em qual armário está e</b></label>
+                  <label htmlFor="cabinet"><b>em qual armário está e</b></label>
                     {comb_cabinet}
                 </div>
                 <div className="form-group">
-                  <label htmlFor="pwd"><b>qual a quantidade:</b></label>
+                  <label htmlFor="quant"><b>qual a quantidade:</b></label>
                   <input type="input" name="quantidade" className="form-control" />
                 </div>
                 <div clasName="row">
-                    <i class="material-icons">add_circle</i> <span><b>Adicionar</b></span>
+                    <button type="submit" class="btn btn-success">Adicionar</button>
                 </div>
+                </form>
                 
               </div>
             </div>
           </div>
         )
+      }
+
+      add_product = (event) => {
+        event.preventDefault();
+        let user = new FormData(event.target);
+        console.log(user.get('models'));
+        console.log(user.get('cabinet'));
+        console.log(user.get('quantidade'));
+
+        let data_m = {};
+        this.state.all_models.map(item => {
+            if(item.name == user.get('models')) data_m.model = item._id;
+        });
+        this.state.all_cabinet.map(item => {
+            if(item.code == user.get('cabinet')) data_m.cabinet = item._id;
+        });
+
+        data_m.name = user.get('model');
+        
+
+        let data_model = {model: data_m.model, cabinet: data_m.cabinet}
+        let products = [];
+        
+        for (let i =0; i < parseInt(user.get('quantidade', 10)); i++) {
+            products.push(data_model);
+        }
+        console.log("products");
+        console.log(products);
+        fetch('http://localhost:8081/products', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+                body: JSON.stringify(products)
+            }).then(function (res) { return res.json(); })
+            .then(function (data) {
+                if(data != undefined){
+                alert('Produto adicionado com sucesso');
+                } else { 
+                alert('Problema ao adicionar produto');  
+                }
+            })
+            this.onSubmit('/');
       }
       /////////////////////////////// CREATE PRODUCT /////////////////////////////
     create_product = () => {
@@ -157,7 +203,7 @@ class Add extends Component {
     }
 
     select_provider = (answer) => {
-        let comb_cabinet = this.get_combobox(this.state.all_cabinet, "cabinet", "name");
+        let comb_cabinet = this.get_combobox(this.state.all_cabinet, "cabinet", "code");
         if (answer == "yes") {
             let comb_provider = this.get_combobox(this.state.all_provider, "provider", "name");
             
@@ -172,25 +218,27 @@ class Add extends Component {
         if (answer == "yes"){
             content = <div className="row">
                 <div className="col-12">
-                    <div className="form-group">
-                        <label htmlFor="pwd"><b>Então selecione o fornecedor,</b></label>
-                        {comb_provider}                 
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="pwd"><b>informe qual o nome do novo modelo,</b></label>
-                        <input type="input" name="quantidade" className="form-control" />                 
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="pwd"><b>em qual armário vai ser colocado e</b></label>
-                        {comb_cabinet}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="pwd"><b>qual a quantidade de amostras:</b></label>
-                        <input type="input" name="quantidade" className="form-control" />
-                    </div>
-                    <div clasName="row">
-                        <i class="material-icons">add_circle</i> <span><b>Adicionar</b></span>
-                    </div>
+                    <form onSubmit={this.add_model}>
+                        <div className="form-group" >
+                            <label htmlFor="pwd"><b>Então selecione o fornecedor,</b></label>
+                            {comb_provider}                 
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="pwd"><b>informe qual o nome do novo modelo,</b></label>
+                            <input type="input" name="model" className="form-control" />                 
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="pwd"><b>em qual armário vai ser colocado e</b></label>
+                            {comb_cabinet}
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="pwd"><b>qual a quantidade de amostras:</b></label>
+                            <input type="input" name="quantidade" className="form-control" />
+                        </div>
+                        <div clasName="row">
+                            <button type="submit" class="btn btn-success">Adicionar</button>
+                        </div>
+                    </form>
                 </div>
                 
                 
@@ -198,31 +246,33 @@ class Add extends Component {
         } else {
             content = <div className="row">
                 <div className="col-12">
-                <div className="form-group">
-                    <div className="row"><b>Então informe o nome do novo fornedor,</b></div>
-                    <div className="row">
-                    <input type="input" name="provider" class="form-control" />
+                <form onSubmit={this.add_model_provider}>
+                    <div className="form-group">
+                        <div className="row"><b>Então informe o nome do novo fornedor,</b></div>
+                        <div className="row">
+                        <input type="input" name="provider" class="form-control" />
+                        </div>
                     </div>
-                </div>
-                <div className="form-group">
-                    <div className="row"><b>do modelo,</b></div>
-                    <div className="row">
-                    <input type="input" name="provider" class="form-control" />
+                    <div className="form-group">
+                        <div className="row"><b>do modelo,</b></div>
+                        <div className="row">
+                        <input type="input" name="model" class="form-control" />
+                        </div>
                     </div>
-                </div>
-                <div className="form-group">
-                        <div className="row"><label htmlFor="pwd"><b>em qual armário está e</b></label></div>
-                        <div className="row">{comb_cabinet}</div>
-                </div>
-                <div className="form-group">
-                    <div className="row"><b>quantas peças está adicionando deste modelo:</b></div>
-                    <div className="row">
-                    <input type="input" name="provider" class="form-control" />
+                    <div className="form-group">
+                            <div className="row"><label htmlFor="pwd"><b>em qual armário está e</b></label></div>
+                            <div className="row">{comb_cabinet}</div>
                     </div>
-                </div>
-                <div clasName="row">
-                    <i class="material-icons">add_circle</i> <span><b>Adicionar</b></span>
-                </div>
+                    <div className="form-group">
+                        <div className="row"><b>quantas peças está adicionando deste modelo:</b></div>
+                        <div className="row">
+                        <input type="input" name="quantidade" class="form-control" />
+                        </div>
+                    </div>
+                    <div clasName="row">
+                        <button type="submit" class="btn btn-success">Adicionar</button>
+                    </div>
+                </form>
                 </div>
                 
             </div>
@@ -237,6 +287,115 @@ class Add extends Component {
         )
     }
 
+    add_model = () => {
+        event.preventDefault();
+        let user = new FormData(event.target);
+        console.log(user.get('provider'));
+        console.log(user.get('model'));
+        console.log(user.get('cabinet'));
+        console.log(user.get('quantidade'));
+         
+        let data_m = {cabinet:''}
+        this.state.all_provider.map(item => {
+            if(item.name == user.get('provider')) data_m.provider = item._id;
+        });
+        this.state.all_cabinet.map(item => {
+            if(item.code == user.get('cabinet')) data_m.cabinet = item._id;
+        });
+
+        data_m.name = user.get('model');
+        
+        fetch('http://localhost:8081/model', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+                body: JSON.stringify(data_m)
+            }).then(function (res) { return res.json();})
+            .then(function (data) {
+                let data_model = {model: data._id, cabinet: data_m.cabinet}
+                let products = [];
+                
+                for (let i =0; i < parseInt(user.get('quantidade',10)); i++) {
+                    products.push(data_model);
+                }
+                fetch('http://localhost:8081/products', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                        body: JSON.stringify(products)
+                    }).then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        if(data != undefined){
+                        alert('Produto adicionado com sucesso');
+                        } else { 
+                        alert('Problema ao adicionar produto');  
+                        }
+                    })
+    })
+    this.onSubmit('/');
+    
+      
+    }
+
+
+    add_model_provider = () => {
+        event.preventDefault();
+        let user = new FormData(event.target);
+        
+        let data_p = {name: user.get('provider')};
+        this.state.all_cabinet.map(item => {
+            if(item.code == user.get('cabinet')) data_p.cabinet = item._id;
+        });
+
+        fetch('http://localhost:8081/provider', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+                body: JSON.stringify(data_p)
+            }).then(function (res) { return res.json();})
+            .then(function (data) {
+                let data_m = {name: user.get('model'), provider: data._id};
+                fetch('http://localhost:8081/model', {
+                    method: 'POST',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json'
+                    },
+                      body: JSON.stringify(data_m)
+                  }).then(function (res) { return res.json();})
+                    .then(function (data) {
+                        let data_model = {model: data._id, cabinet: '', }
+                        let products = [];
+                        
+                        data_model.cabinet = data_p.cabinet;
+                        for (let i =0; i < parseInt(user.get('quantidade',10)); i++) {
+                            products.push(data_model);
+                        }
+                        fetch('http://localhost:8081/products', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                                body: JSON.stringify(products)
+                            }).then(function (res) { return res.json(); })
+                            .then(function (data) {
+                                if(data != undefined){
+                                alert('Produto adicionado com sucesso');
+                                } else { 
+                                alert('Problema ao adicionar produto');  
+                                }
+                            })
+            })
+        })
+        this.onSubmit('/');
+    }
 
     render(){
         if (this.state.redirect) {

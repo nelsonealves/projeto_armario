@@ -24,31 +24,65 @@ module.exports.add_product = (req, res) => {
 }
 
 module.exports.add_many_products = (req, res) => {
+    console.log(req.body);
     let id_products= [];
     model_product.insertMany(req.body,(err, result1) => {
         if(err) console.log(err);
-            if (Array.isArray(result1)){
-                result1.forEach(element => {
-                    id_products.push(element._id)
-                })
+    	res.status(200).send({status: "ok"});	                
+    });
                 
-                console.log(result1);
-                
-                model_cabinet.updateMany(
-                    {
-                        _id: objectid(result1[0].cabinet)
-                    },{
-                        $push: {products: id_products}
-                    }, (err, result2) => {
-                        if(err) res.send(err);
-                        console.log(result2);
-                        res.send(result2);
-                    }
-                );
-                
-            }
+}
         //console.log(res);
-    })       
+module.exports.get_by_cabinet = (req, res) => {
+    model_product.aggregate(
+        [{
+            $match: {
+                cabinet: objectid(req.params.cabinet_id)
+            }
+        }],
+        (err, result) => {
+            if (err) res.status(400).send(err);
+            
+            model_product.populate(result, {path: 'cabinet', model: 'cabinet'}, (err, result1) => {
+                if(err) res.send(err);
+                
+                model_product.populate(result1, {path: 'model',model: 'model'}, (err, resp)=>{
+                    if(err) res.send(err);
+                    
+                    model_product.populate(resp, {path: 'model.provider', model: 'provider'}, (err, resp)=>{
+                        if(err) res.send(err)  
+                        res.status(200).send(resp)
+                    })
+                })
+            })
+        }
+    )
+}
+
+module.exports.get_by_model = (req, res) => {
+    model_product.aggregate(
+        [{
+            $match: {
+                model: objectid(req.params.model_id)
+            }
+        }],
+        (err, result) => {
+            if (err) res.status(400).send(err);
+            
+            model_product.populate(result, {path: 'cabinet', model: 'cabinet'}, (err, result1) => {
+                if(err) res.send(err);
+                
+                model_product.populate(result1, {path: 'model',model: 'model'}, (err, resp)=>{
+                    if(err) res.send(err);
+                    
+                    model_product.populate(resp, {path: 'model.provider', model: 'provider'}, (err, resp)=>{
+                        if(err) res.send(err)  
+                        res.status(200).send(resp)
+                    })
+                })
+            })
+        }
+    )
 }
 
 module.exports.get_products = (req, res) => {
