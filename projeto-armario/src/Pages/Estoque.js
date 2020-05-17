@@ -14,15 +14,18 @@ class Estoque extends Component {
       users: [],
       date: new Date(),
       id_user_select_e:[], 
-      data_e: [] 
+      data_e: [],
+      all_users: [] 
     }
     this.row_select = this.row_select.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount = async () => {
     console.log("this.props.body");
     console.log(this.props.data);
+    
     this.setState({data: this.props.data.body})
+    this.populate_users();
    
   }
 
@@ -33,10 +36,17 @@ class Estoque extends Component {
     .then((resp) => { return resp.json(); })
     .then((data) => {
       data.map((item, i) => {
-        aux.push(data[i].matricula);
+
+        aux.push({id: item._id, name: item.matricula});
       });
-      aux.sort();
+      
+      console.log(data);
       this.setState({all_users: data});
+      aux = aux.sort((a,b) => {
+        if (a.name > b.name )return 1; 
+        if (b.name > a.name) return -1;
+        return 0;
+      });
       this.setState({users: aux});
      }).catch((err) => {
        console.log(err);
@@ -137,14 +147,21 @@ class Estoque extends Component {
       console.log("DATAAAA")
       data.product = item.id;
       console.log(item.id);
+
       if(user.get("return") == null) {
-        data.return = false;
+        console.log('SOME');
+        data.status = '2';
       } else {
-        data.return = true
+        console.log('VOLTA');
+        data.status = '1'
       }
       data_loan.push(data)
     });
     
+    console.log("PEGOU");
+    console.log(user_name);
+    console.log("DATA_LOAN");
+    console.log(data_loan);
     await fetch('http://localhost:8081/loan', {
       method: 'POST',
       headers: {
@@ -156,6 +173,7 @@ class Estoque extends Component {
       .then(function (data) {
         if(data != undefined){
           alert('Empréstimo realizado');
+          history.push('/');
         } else { 
           alert('Problema ao realizar empréstimo');  
         }

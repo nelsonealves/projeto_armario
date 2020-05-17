@@ -10,6 +10,8 @@ let cabinet_model = mongoose.model('cabinet', cabinet_schema);
 let objectid = require('mongodb').ObjectID;
 
 module.exports.add_loan = (req, res) => {
+    console.log('REQ.BODY');
+    console.log(req.body);
     req.body.map(item => {
         let loan = new loan_model(item);
         loan.save((err, result) => {
@@ -17,7 +19,7 @@ module.exports.add_loan = (req, res) => {
             product_model.update({
                 _id: objectid(loan.product)
             },{
-                    $set: {loan: true}
+                    $set: {status: item.status}
                 }, {new: true},
                 (err, result) =>{
                     if(err) result.status(400).send(err);
@@ -91,11 +93,24 @@ module.exports.devolute = (req, res) => {
     res.send({result: "deleted"})
 }
 
-module.exports.get_all_loan = (req, res) => {
+module.exports.get_all_loans = (req, res) => {
     loan_model.find({},
         (err, msg) => {
             if(err) res.send(err);
-            res.status(200).json(msg);
+            loan_model.populate(msg, {path: 'product', model: 'product'}, (err, result1) => {
+                if(err) res.send(err);
+                loan_model.populate(msg, {path: 'user', model: 'user'}, (err, result1) => {
+                    if(err) res.send(err);
+                    loan_model.populate(msg, {path: 'product.model', model: 'model'}, (err, result1) => {
+                        res.status(200).json(msg);
+                    })
+                    
+                    
+                })
+                
+            })
+                
+            
     });
 }
 

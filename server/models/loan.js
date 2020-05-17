@@ -14,8 +14,6 @@ let loan_schema = new mongoose.Schema ({
         ref:'user'
     },
     date: Date,
-    return: Boolean,
-    obs: String
     },{
         collection: 'loan'
     }

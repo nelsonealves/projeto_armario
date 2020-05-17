@@ -89,11 +89,12 @@ class Combobox extends Component {
 
     onChange = (value) => {
         console.log(value.target.value);
+        this.props.selected(value.target.value);
     }
 
     render(){
         return(
-            <select name={this.props.name} class="custom-select">
+            <select onChange={(event)=>{this.onChange(event)}} name={this.props.name} class="custom-select">
                 {
                     Object.keys(this.props.option).map(function(key) {
                         return(

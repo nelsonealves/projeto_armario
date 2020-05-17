@@ -3,9 +3,7 @@ import {Redirect} from 'react-router-dom'
 import {Combobox, Modal, Form, Tab} from './Utils.js'
 import './css/sidebar.css';
 import history from './../history';
-import Kitchen from '@material-ui/icons/Kitchen';
-import BusinessCenter from '@material-ui/icons/BusinessCenter';
-import PhoneIphone from '@material-ui/icons/PhoneIphone';
+import Table from './Table_product.js'
 
 
 class Search_Model extends Component {
@@ -14,7 +12,7 @@ class Search_Model extends Component {
         this.state = { 
             redirect:null,
             content: null,
-            all_provider: null,
+            all_loan: null,
             all_models: null,
             all_products: null,
             all_cabinet: null
@@ -28,16 +26,33 @@ class Search_Model extends Component {
         history.push(path);
     }
 
-    componentDidMount(){
-        this.fetch_get("all_provider", "all_provider");
-        this.fetch_get("all_models", "all_models");
-        this.fetch_get("all_product", "all_products");
-        this.fetch_get("all_cabinets", "all_cabinet");
-        this.home();
-    }
+    componentDidMount = async () => {
+        await this.fetch_get("all_loans", "all_loan");
+        
+        let data = []
 
-    fetch_get = (path, state) => {
-        fetch("http://localhost:8081/"+path, { method: 'GET' })
+        if (this.state.all_loan != null) {
+            this.state.all_loan.map(item => {
+            
+                let obj = {id: item._id, body: []};
+                obj.body.push(item.user.name);
+                obj.body.push(item.product.model.name);
+                obj.body.push(item.product.status);
+                data.push(obj);
+            
+            });
+            this.home(data);
+        } else {
+            alert("Nenhum produto foi emprestado até o momento");
+            history.push('/search');
+        }
+
+
+        
+    }
+    
+    fetch_get = async (path, state) => {
+        await fetch("http://localhost:8081/"+path, { method: 'GET' })
         .then((resp) => { return resp.json(); })
         .then((data) => {
             this.setState({[state]: data}); 
@@ -46,11 +61,12 @@ class Search_Model extends Component {
             })
     }
 
-    home = () => {
-        this.setState({content: this.select_search()})
+    home = (data) => {
+
+        this.setState({content: this.select_search(data)})
     }
 
-    select_search = () => {
+    select_search = (data) => {
         return (
             <div>
                 <div onClick={() => {this.onSubmit('/search')}} >
@@ -61,11 +77,17 @@ class Search_Model extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <b>SEARCH FOR MODEL</b>
+                    <b>Tela apenas para consulta de todos os produtos emprestados que voltam ou não.</b>
+
+                    <Table header={['Model', 'Usuário', 'Status']} data={data} row_select={this.row_select} filter={true} />
                 </div>
                 
             </div>
         )
+    }
+
+    row_select = () => {
+
     }
 
     render(){

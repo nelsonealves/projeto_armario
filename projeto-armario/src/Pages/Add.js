@@ -77,11 +77,13 @@ class Add extends Component {
                 
                 <div className="row">
                     
-                        <div className="centerly">
-                            <i onClick={() => {this.add_form_product()}} className="material-icons ">thumb_up</i>
+                        <div style={{cursor: 'pointer'}} onClick={() => {this.add_form_product()}} className="centerly">
+                            <i  className="material-icons ">thumb_up</i>
+                            <div class="row"><div className="centerly"><span class="my-auto">Sim</span></div></div>
                         </div>
-                        <div className="centerly">
-                            <i onClick={() => {this.create_product()}} className="material-icons">thumb_down</i>
+                        <div style={{cursor: 'pointer'}} onClick={() => {this.create_product()}}  className="centerly">
+                            <i className="material-icons">thumb_down</i>
+                            <div class="row"><div className="centerly"><span class="my-auto">Não</span></div></div>
                         </div>
                 </div>
                 </div>
@@ -191,11 +193,13 @@ class Add extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="centerly">
-                    <i onClick={() => {this.select_provider("yes")}} className="material-icons">thumb_up</i>
+                    <div style={{cursor: 'pointer'}} onClick={() => {this.select_provider("yes")}} className="centerly">
+                    <i className="material-icons">thumb_up</i>
+                    <div class="row"><div className="centerly"><span class="my-auto">Sim</span></div></div>
                     </div>
-                    <div className="centerly">
-                    <i onClick={() => {this.select_provider("no")}} className="material-icons">thumb_down</i>
+                    <div style={{cursor: 'pointer'}} onClick={() => {this.select_provider("no")}}  className="centerly">
+                    <i className="material-icons">thumb_down</i>
+                    <div class="row"><div className="centerly"><span class="my-auto">Não</span></div></div>
                     </div>
                 </div>
             </div>

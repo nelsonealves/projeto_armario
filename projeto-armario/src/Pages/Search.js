@@ -74,7 +74,7 @@ class Search extends Component {
                     </div>
                     <div onClick={() => {this.onSubmit('/search_model')}} class="col-4">
                             <div class="row"><div className="text-center centerly"><PhoneIphone/></div></div>
-                            <div class="row"><div className="centerly"><span class="my-auto">Por modelo</span></div></div>
+                            <div class="row"><div className="centerly"><span class="my-auto">Emprestados/Não voltam</span></div></div>
                     </div>
                 </div>
             </div>
