@@ -24,19 +24,20 @@ class Main extends Component {
                     <div>
                         <div class="container">
                             <div class="row">
-                                <div onClick={() => {this.onSubmit('/add')}} class="col-4">
+                                <div onClick={() => {this.onSubmit('/add')}} style={{cursor: 'pointer'}} class="col-4">
                                         <div class="row"><div className="text-center centerly"><i class="material-icons">playlist_add</i></div></div>
                                         <div class="row"><div className="centerly"><span class="my-auto">Adicionar amostra</span></div></div>
                                 </div>
-                                <div onClick={() => {this.onSubmit('/search')}} class="col-4">
+                                <div onClick={() => {this.onSubmit('/search')}} style={{cursor: 'pointer'}} class="col-4">
                                         <div class="row"><div className="text-center centerly"><i class="material-icons">search</i></div></div>
-                                        <div class="row"><div className="centerly"><span class="my-auto">Localizar amostra</span></div></div>
+                                        <div class="row"><div className="centerly" ><span class="my-auto">Localizar amostra</span></div></div>
                                 </div>
-                                <div onClick={() => {this.onSubmit('/devolute')}} class="col-4">
+                                <div onClick={() => {this.onSubmit('/devolute')}} style={{cursor: 'pointer'}} class="col-4">
                                         <div class="row"><div className="text-center centerly"><i class="material-icons">save_alt</i></div></div>
                                         <div class="row"><div className="centerly"><span class="my-auto">Devolver amostra</span></div></div>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
             </div>

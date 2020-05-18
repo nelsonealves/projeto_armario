@@ -3,7 +3,7 @@ import {Modal, Form, Tab} from './Utils.js'
 
 import Table from './Table_product.js'
 import history from './../history';
-
+import './css/sidebar.css'
 class Usuarios extends Component {
   constructor(props) {
     super(props);
@@ -53,6 +53,11 @@ class Usuarios extends Component {
       await fetch("http://localhost:8081/all_users", { method: 'GET' })
       .then((resp) => { return resp.json(); })
       .then((data) => {
+        data.sort((a,b) => {
+          if (a.matricula > b.matricula )return 1; 
+          if (b.matricula > a.matricula) return -1;
+          return 0;
+        });
         console.log(data);
         data.map((item, i) => {
           
@@ -302,21 +307,25 @@ class Usuarios extends Component {
                         </div>
                     </div>
                 </div>
-            <div className="row">
-              <strong>Selecione o usuário que deseja realizar a devolução:</strong>   
-            </div>   
-            <div class="col-sm-6">
-            <div className="row">
-              <a class="accordion-toggle btn btn-primary" data-toggle="collapse" href="#demo">+ Usuário</a>
-            </div>
-              <div id="demo" class="collapse">
-                <Form form={this.form_user()} return={this.add_device}/>
-              </div>
+            <div className=" col-12">
+                
+              <div class="col-sm-6 centerly">
               <div className="row">
-                <Table header={["Nome", "Matrícula"]} data={this.state.data} id_select={this.state.id_user_select} row_select={this.populate_product} filter={true} 
-                value_filter={this.value_filter}/>
+                <strong>Selecione o usuário que deseja realizar a devolução:</strong>
+                   
+              </div> 
+              <div className="row">
+                Caso não possua usuário cadastrado, clique em <a class="accordion-toggle btn btn-primary"  data-toggle="collapse" href="#demo">Adicionar usuário</a>
               </div>
-              <button id="button_modal" type="button" style={{display:"none"}} data-toggle="modal" data-target='#create_dealership'> Nova concessionária</button>
+                <div id="demo" class="collapse">
+                  <Form form={this.form_user()} return={this.add_device}/>
+                </div>
+                <div className="row">
+                  <Table header={["Nome", "Matrícula"]} data={this.state.data} id_select={this.state.id_user_select} row_select={this.populate_product} filter={true} 
+                  value_filter={this.value_filter}/>
+                </div>
+                <button id="button_modal" type="button" style={{display:"none"}} data-toggle="modal" data-target='#create_dealership'> Nova concessionária</button>
+                </div>
               </div>
               <div class="col-12">
                 <Modal 

@@ -61,7 +61,7 @@ class Search_Provider extends Component {
                 console.log("encontrou");
                 this.state.all_models.map(model => {
                     if (model.provider == provider._id) {
-                        let model_obj = {id: model._id, body: [model.name, 0, 0, 0]}
+                        let model_obj = {id: model._id, body: [model.name, 0, 0]}
                         this.state.all_products.map(product => {
                             if (product.model._id == model._id) {
                                 if(product.status == '0'){    
@@ -72,10 +72,7 @@ class Search_Provider extends Component {
                                     model_obj.body[2] = model_obj.body[2] + 1;
                                     console.log(model.name);
                                 } 
-                                if(product.status == '2'){    
-                                    model_obj.body[3] = model_obj.body[3] + 1;
-                                    console.log(model.name);
-                                } 
+                                
                             } 
                         });
                         product_groupby.push(model_obj);
@@ -95,7 +92,7 @@ class Search_Provider extends Component {
                 <strong>Agora selecione o modelo desejado:</strong>    
             </div>
             <Table 
-                header={["Modelo", "Disponiveis", 'Emprestados', 'Não voltam']}
+                header={["Modelo", "Disponiveis", 'Emprestados']}
                 data={product_groupby} 
                 row_select={this.select_model} 
                 filter={true} 

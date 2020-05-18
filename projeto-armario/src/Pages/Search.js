@@ -55,7 +55,7 @@ class Search extends Component {
             <div>
                 <div onClick={() => {this.onSubmit('/')}} >
                     <div className="row">
-                        <div className="text-left" className="col-4">
+                        <div style={{cursor: 'pointer'}} className="text-left col-2">
                             <i className="material-icons">keyboard_backspace</i>
                         </div>
                     </div>
@@ -64,17 +64,27 @@ class Search extends Component {
                     <b>Selecione a opção na qual deseja realizar a busca:</b>
                 </div>
                 <div className="row">
-                    <div onClick={() => {this.onSubmit('/search_cabinet')}} class="col-4">
-                            <div class="row"><div className="text-center centerly"><Kitchen/></div></div>
-                            <div class="row"><div className="centerly"><span class="my-auto">Por armário</span></div></div>
+                    <div style={{cursor: 'pointer'}} onClick={() => {this.onSubmit('/search_cabinet')}} class="col-4">
+                        <div class="row"><div className="text-center centerly"><Kitchen/></div></div>
+                        <div class="row"><div className="centerly"><span class="my-auto">Por armário</span></div></div>
                     </div>
-                    <div onClick={() => {this.onSubmit('/search_provider')}} class="col-4">
-                            <div class="row"><div className="text-center centerly"><BusinessCenter/></div></div>
-                            <div class="row"><div className="centerly"><span class="my-auto">Por fornecedor</span></div></div>
+                    <div style={{cursor: 'pointer'}} onClick={() => {this.onSubmit('/search_provider')}} class="col-4">
+                        <div class="row"><div className="text-center centerly"><BusinessCenter/></div></div>
+                        <div class="row"><div className="centerly"><span class="my-auto">Por fornecedor</span></div></div>
                     </div>
-                    <div onClick={() => {this.onSubmit('/search_model')}} class="col-4">
-                            <div class="row"><div className="text-center centerly"><PhoneIphone/></div></div>
-                            <div class="row"><div className="centerly"><span class="my-auto">Emprestados/Não voltam</span></div></div>
+                    <div style={{cursor: 'pointer'}} onClick={() => {this.onSubmit('/search_model')}} class="col-4">
+                        <div class="row"><div className="text-center centerly"><PhoneIphone/></div></div>
+                        <div class="row"><div className="centerly"><span class="my-auto">Emprestados/Não voltam</span></div></div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div style={{cursor: 'pointer'}} onClick={() => {this.onSubmit('/search_model')}} class="col-4">
+                        <div class="row"><div className="text-center centerly"><PhoneIphone/></div></div>
+                        <div class="row"><div className="centerly"><span class="my-auto">Histórico</span></div></div>
+                    </div>
+                    <div style={{cursor: 'pointer'}} onClick={() => {this.onSubmit('/search_model')}} class="col-4">
+                        <div class="row"><div className="text-center centerly"><PhoneIphone/></div></div>
+                        <div class="row"><div className="centerly"><span class="my-auto">Histórico</span></div></div>
                     </div>
                 </div>
             </div>
