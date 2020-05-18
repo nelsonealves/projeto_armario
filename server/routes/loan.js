@@ -27,9 +27,6 @@ module.exports = (express) => {
         express.controllers.loan.update_loan(req, res);  
     })
 
-    express.delete('/loan/:loan_id', (req, res) => {
-        express.controllers.loan.remove_loan(req, res);  
-    })
     
     // express.delete('/product/:product_id/user/:user_id', (req, res) => {
     //     express.controllers.product.remove_user_product(req, res);  

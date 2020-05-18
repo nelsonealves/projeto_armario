@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {Modal, Form, Tab} from './Utils.js'
-//import Table from './Table.js'
+
 import Table from './Table_product.js'
-import Table_s from './Table_select.js'
+import history from './../history';
+
 class Usuarios extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +13,8 @@ class Usuarios extends Component {
       product_user_e:[],
       row_select: [],
       id_user_select: [],
-      loan: []      
+      loan: [],
+      all_loans: []      
     };
     this.row_select = this.row_select.bind(this);
     this.populate_table = this.populate_table.bind(this);
@@ -27,7 +29,19 @@ class Usuarios extends Component {
   }
 
   componentDidMount() {
+    this.fetch_get("all_loans", 'all_loans');
     this.populate_table();
+  
+  }
+
+  fetch_get = async (path, state) => {
+    await fetch("http://localhost:8081/"+path, { method: 'GET' })
+    .then((resp) => { return resp.json(); })
+    .then((data) => {
+        this.setState({[state]: data}); 
+        }).catch((err) => {
+        console.log(err);
+        });
   }
 
   async populate_table(){
@@ -60,34 +74,26 @@ class Usuarios extends Component {
   }
 
   async populate_product(value){
-    console.log(value.body.id);
+    console.log(value.body.body[1]);
     
-
-    document.getElementById("button_modal").click();
     let table = [];
-    let aux = [];
-    let aux1 = [];
-
-    await fetch("http://localhost:8081/loan/"+ value.body.id +"/user", { method: 'GET' })
-    .then((resp) => { return resp.json(); })
-    .then((data) => {
-      this.setState({loan: data});
-      data.map((item, i) => {
-        let object = {id:null, body:[]}
-        
-        if(item.product.loan) {
-          object.id = item._id
-          aux.push(item.product.model.name);
-          object.body = aux;
-          table.push(object);
-          aux = [];
+   
+    this.state.all_loans.map( event => {
+      let obj = {id: null, body:[]}
+      if (event.user.matricula == value.body.body[1]) {
+        if(event.product.status == "1"){
+          obj.id = event._id;
+          console.log('Possui produto');
+          console.log(event.product.model.name);
+          obj.body.push(event.product.model.name, event.product.cabinet.code);
         }
-      })
-    this.setState({product_user: table});
-    }).catch((err) => {
-      console.log(err);
-    })
+      }
+      table.push(obj); 
+  });
+
+  this.setState({product_user: table});
     
+  document.getElementById("button_modal").click();
 }
 
   form_user = () => {
@@ -190,14 +196,16 @@ class Usuarios extends Component {
   modal_user = () => {
     return (
       <div>
-        <div class="col-sm-12">
-          <Table header={["Produto"]} data={this.state.product_user} id_select={""} row_select={this.row_select} filter={true} />
-        </div>
-        <div class="col-sm-12">
-        <div class="row">
-          <button type="submit" onClick={this.devolute} class="btn btn-success">Devolver</button>
-        </div>
-          <Table header={["Produto"]} data={this.state.product_user_e} id_select={""} row_select={this.row_select_e} filter={true} />
+        <div className="row">
+          <div class="col-xl-6">
+            <Table header={["Produto", 'Armário']} data={this.state.product_user} id_select={""} row_select={this.row_select} filter={true} />
+          </div>
+          <div class="col-xl-6">
+          <div class="row">
+            <button type="submit" onClick={this.devolute} class="btn btn-success">Devolver</button>
+          </div>
+            <Table header={["Produto", "Armário"]} data={this.state.product_user_e} id_select={""} row_select={this.row_select_e} filter={true} />
+          </div>
         </div>
       </div>
     )
@@ -241,16 +249,19 @@ class Usuarios extends Component {
 
   devolute = async (value) => {
     let aux = [];
+    console.log("value");
+    console.log(value);
 
     this.state.product_user_e.map(item1 => {
-      this.state.loan.map(item2 => {
+      this.state.all_loans.map(item2 => {
         if (item1.id == item2._id) {
+          console.log("ENCONTROU");
           aux.push(item2);
         }
       });
     });
 
-   if(aux) {
+   if(aux){
      await fetch('http://localhost:8081/loan', {
         method: 'DELETE',
         headers: {
@@ -261,14 +272,18 @@ class Usuarios extends Component {
       }).then(function (res) { return res.json(); })
         .then(function (data) {
           if(data != undefined){
-            alert('Produto devolvido com sucesso');
-          } else { 
+              alert('Produto devolvido com sucesso');
+              document.getElementById('modal-close').click();
+              history.push('/');
+            } else { 
             alert('Problema ao devolver produto');  
-          }
+            }
         })
+        
         this.setState({product_user_e: []})
     }   
-  }
+    
+ }
 
   value_filter = (value) => {
     console.log(value)
@@ -277,6 +292,16 @@ class Usuarios extends Component {
     
     return(
         <div>
+          <div onClick={() => {history.push('/')}} >
+                    <div className="row">
+                        <div className="text-left" className="col-4">
+                            <i className="material-icons">keyboard_backspace</i>
+                        </div>
+                    </div>
+                </div>
+            <div className="row">
+              <strong>Selecione o usuário que deseja realizar a devolução:</strong>   
+            </div>   
             <div class="col-sm-6">
             <div className="row">
               <a class="accordion-toggle btn btn-primary" data-toggle="collapse" href="#demo">+ Usuário</a>
@@ -290,10 +315,10 @@ class Usuarios extends Component {
               </div>
               <button id="button_modal" type="button" style={{display:"none"}} data-toggle="modal" data-target='#create_dealership'> Nova concessionária</button>
               </div>
-              <div class="col-sm-10">
+              <div class="col-12">
                 <Modal 
                   id={'create_dealership'} 
-                  header={'Usuári'} 
+                  header={'Selecione as amostras que deseja devolver.'} 
                   body={this.modal_user()} 
                   footer={''}
                 />

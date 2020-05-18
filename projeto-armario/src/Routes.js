@@ -14,6 +14,7 @@ import Search_Model from './Pages/Search_Model'
 import Search_Provider from './Pages/Search_Provider'
 import history from './history';
 
+
 export default class Routes extends Component {
     render() {
         return (
@@ -28,7 +29,7 @@ export default class Routes extends Component {
                     <Route path='/products' component={Produtos}/>
                     <Route path='/add' component={Add}/>
                     <Route path='/search' component={Search}/>
-                    <Route path='/devolute' component={Devolute}/>
+                    <Route path='/devolute' component={Usuarios}/>
                     
                 </Switch>
 

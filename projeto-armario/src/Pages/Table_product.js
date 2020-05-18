@@ -16,22 +16,22 @@ class Table extends React.Component {
     }
 
     componentDidMount(){
-        let filter = document.querySelector('.filter');
-        filter.addEventListener('keyup', (word) => {
-            console.log(filter.value);
-            this.props.value_filter(filter.value);
+        // let filter = document.querySelector('.filter');
+        // filter.addEventListener('keyup', (word) => {
+        //     console.log(filter.value);
+        //     this.props.value_filter(filter.value);
             
             
-        });
+        // });
         
        
     }
     render(){
-        let filter;
-        if(this.props.filter) filter = <input class="form-control filter" id="myInput" type="text" placeholder="Procurar"/>
+        //let filter;
+        //if(this.props.filter) filter = <input class="form-control filter" id="myInput" type="text" placeholder="Procurar"/>
         return(
             <div className='table-responsive'>
-            {filter}
+            
             <table className="table table-striped table-hover">
             <thead>
             <tr>

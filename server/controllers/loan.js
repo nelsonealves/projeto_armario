@@ -82,7 +82,7 @@ module.exports.devolute = (req, res) => {
             product_model.update({
                 _id: objectid(item.product._id)
             },  {
-                    $set: {loan: false}
+                    $set: {status: "0"}
                 }, {new: true},
                     (err) =>{
                         if(err) res.status(400).send(err);
@@ -102,10 +102,11 @@ module.exports.get_all_loans = (req, res) => {
                 loan_model.populate(msg, {path: 'user', model: 'user'}, (err, result1) => {
                     if(err) res.send(err);
                     loan_model.populate(msg, {path: 'product.model', model: 'model'}, (err, result1) => {
-                        res.status(200).json(msg);
+                        if(err) res.send(err);
+                        loan_model.populate(msg, {path: 'product.cabinet', model: 'cabinet'}, (err, result1) => {
+                            res.status(200).json(msg);
+                        })
                     })
-                    
-                    
                 })
                 
             })
@@ -148,13 +149,4 @@ module.exports.get_loan_by_user = (req, res) => {
        ;
     })
         
-}
-
-module.exports.remove_loan = (req, res) => {
-    loan_model.remove({ 
-        _id: objectid(req.params.model_id) 
-    }, (err, result) => {
-            if(err) res.send(err);
-            res.status(200).json(result);
-        })
 }

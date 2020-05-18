@@ -85,13 +85,24 @@ class Search_Provider extends Component {
         });
         console.log('product_groupby');
         console.log(product_groupby);
-        this.setState({table_models: <Table 
-                                            header={["Modelo", "Disponiveis", 'Emprestados', 'Não voltam']}
-                                            data={product_groupby} 
-                                            row_select={this.select_model} 
-                                            filter={true} 
-                                    />
-                        });
+        this.setState({table_models:this.table_model(product_groupby)});
+    }
+
+    table_model = (product_groupby) => {
+        return(
+            <React.Fragment>
+            <div className="row">
+                <strong>Agora selecione o modelo desejado:</strong>    
+            </div>
+            <Table 
+                header={["Modelo", "Disponiveis", 'Emprestados', 'Não voltam']}
+                data={product_groupby} 
+                row_select={this.select_model} 
+                filter={true} 
+            />
+            </React.Fragment>
+        )
+
     }
     select_model = (value) => {
         console.log("clicou");
