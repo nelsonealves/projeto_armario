@@ -197,6 +197,9 @@ class Usuarios extends Component {
     return (
       <div>
         <div className="row">
+          W
+        </div>
+        <div className="row">
           <div class="col-xl-6">
             <Table header={["Produto", 'Armário']} data={this.state.product_user} id_select={""} row_select={this.row_select} filter={true} />
           </div>
