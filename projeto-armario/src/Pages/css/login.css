@@ -1,0 +1,48 @@
+.border {
+    border-color: black;
+}
+body {
+    /* background-image: url('../image/bg_green.png'); */
+    background-repeat: repeat;
+    overflow: hidden;
+}
+
+.box-login {
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    position: fixed;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    width: 25%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    min-width: 280px;
+}
+
+.box-content {
+    position: relative;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.box-login .row {
+    position: relative;
+    width: 90%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+}
+.centerly {
+    
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  
+}

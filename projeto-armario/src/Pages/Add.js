@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom'
 import {Combobox, Modal, Form, Tab} from './Utils.js'
 import './css/sidebar.css';
+import './css/page.css'
 
 import history from './../history';
 
@@ -406,16 +407,14 @@ class Add extends Component {
             return <Redirect to={this.state.redirect} />
           }
         return(
-            <div>
-                    <div>
-                        <div className="container">
-                                
-                                    {this.state.content}
-                                
-                            
-                        </div>
-                    </div>
+
+            <div className="box-page">
+                    
+                        {this.state.content}
+                    
+                
             </div>
+
         )
     }
 }
