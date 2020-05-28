@@ -1,0 +1,34 @@
+version : '3.1'
+services:
+        mongo: 
+                image: mongo
+                container_name: 'mongo_armario'
+                restart: always
+                environment:
+                        - MONGO_INITDB_DATABASE=armario
+                        - MONGO_INITDB_ROOT_USERNAME=root
+                        - MONGO_INITDB_ROOT_PASSWORD=123456
+                volumes:
+                        - ./.mongo/entry-point.js:/docker-entrypoint-initdb.d/init-mongo.js 
+                        - ./.mongo/db:/data/db
+                ports:
+                        - '27017:27017'
+                networks: 
+                        - armario             
+        reactjs:
+                container_name: 'projeto_armario'
+                build:
+                        context: .
+                        dockerfile: './projeto-armario/Dockerfile'
+                volumes:
+                        - './projeto-armario/:/app'
+                        - '/app/node_modules'
+                ports:
+                        - '3000:3000'
+                environment:
+                        - NODE_ENV=development     
+networks: 
+        armario:
+                driver: 'bridge'
+
+

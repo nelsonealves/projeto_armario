@@ -9,6 +9,7 @@ const Sidebar = props => {
             <a className="navbar-brand">
                 <img src="./logo-intelbras.svg" alt="logo" width="80px"/>
             </a>
+            
         </nav>
         </div>
     )

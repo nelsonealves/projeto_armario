@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Router, Switch, Route, Redirect } from "react-router-dom";
+import { Router, Switch, Route, IndexRedirect } from "react-router-dom";
 
 import Armarios from './Pages/Armarios'
 import Estoque from './Pages/Estoque'
@@ -12,6 +12,8 @@ import Main from './Main'
 import Search_Cabinet from './Pages/Search_Cabinet'
 import Search_Model from './Pages/Search_Model'
 import Search_Provider from './Pages/Search_Provider'
+import Callback from './Pages/Callback'
+import Login from './Pages/Login'
 import history from './history';
 
 
@@ -20,7 +22,8 @@ export default class Routes extends Component {
         return (
             <Router history={history}>
                 <Switch>
-                    <Route path='/' exact  component={Main}/>
+                    <Route path='/teste' component={Login}/>
+                    <Route path='/callback' component={Main}/>
                     <Route path='/search_cabinet' component={Search_Cabinet}/>
                     <Route path='/search_provider' component={Search_Provider}/>
                     <Route path='/search_model' component={Search_Model}/>
@@ -37,3 +40,6 @@ export default class Routes extends Component {
         )
     }
 }
+
+
+
